@@ -14,11 +14,29 @@ func _ready():
 func _process(delta):
 #	# Called every frame. Delta is time since last frame.
 #	# Update game logic here.
-	pass
+
+	if rotation_degrees < -45:
+		rotation_degrees = -45
+		angular_velocity = 0	
+	elif rotation_degrees > 75:
+		rotation_degrees = 75
+		
+		
+	if linear_velocity.y > 0:
+		print(angular_velocity)
+		angular_velocity = 2.5
+	
+	
+func flap(): 
+	linear_velocity = Vector2(linear_velocity.x,-250)
+	angular_velocity = (-4)
+	pass	
+	
 func _input(event):
 	if event is InputEventScreenTouch:
-		print(event.pressed)
-		print(event.is_pressed())
+#		print(event.pressed)
+#		print(event.is_pressed())
+		flap()
 		
 #	if event.is_action_pressed('ui_accept'):
 #		print(event)
