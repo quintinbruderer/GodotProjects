@@ -1,8 +1,9 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=3 format=2]
 
 [ext_resource path="res://sprites/background-d.png" type="Texture" id=1]
+[ext_resource path="res://scenes/bird.tscn" type="PackedScene" id=2]
 
-[node name="Node" type="Node"]
+[node name="Node" type="Node" index="0"]
 
 [node name="Sprite" type="Sprite" parent="." index="0"]
 
@@ -10,5 +11,32 @@ texture = ExtResource( 1 )
 centered = false
 region_rect = Rect2( 77, 20, 1, 1 )
 _sections_unfolded = [ "Offset" ]
+
+[node name="Camera2D" type="Camera2D" parent="." index="1"]
+
+anchor_mode = 0
+rotating = false
+current = true
+zoom = Vector2( 1, 1 )
+limit_left = -10000000
+limit_top = -10000000
+limit_right = 10000000
+limit_bottom = 10000000
+limit_smoothed = false
+drag_margin_h_enabled = true
+drag_margin_v_enabled = true
+smoothing_enabled = false
+smoothing_speed = 5.0
+offset_v = 0.0
+offset_h = 0.0
+drag_margin_left = 0.2
+drag_margin_top = 0.2
+drag_margin_right = 0.2
+drag_margin_bottom = 0.2
+editor_draw_screen = true
+editor_draw_limits = false
+editor_draw_drag_margin = false
+
+[node name="Birdy" parent="." index="2" instance=ExtResource( 2 )]
 
 

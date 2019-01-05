@@ -8,6 +8,7 @@ func _ready():
 	# Called when the node is added to the scene for the first time.
 	# Initialization here
 	set_process_input(true)
+	linear_velocity = Vector2(50,linear_velocity.y)
 
 	pass
 
@@ -23,7 +24,6 @@ func _process(delta):
 		
 		
 	if linear_velocity.y > 0:
-		print(angular_velocity)
 		angular_velocity = 2.5
 	
 	
