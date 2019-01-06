@@ -1,4 +1,4 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://scripts/bird.gd" type="Script" id=1]
 [ext_resource path="res://sprites/burd.png" type="Texture" id=2]
@@ -22,9 +22,14 @@ tracks/0/keys = {
 "values": [ 0, 1, 2, 1, 0 ]
 }
 
-[node name="RigidBody2D" type="RigidBody2D"]
+[sub_resource type="CircleShape2D" id=2]
 
-position = Vector2( 82.5734, 203.443 )
+custom_solver_bias = 0.0
+radius = 15.0
+
+[node name="RigidBody2D" type="RigidBody2D" index="0"]
+
+position = Vector2( 72, 200 )
 input_pickable = false
 collision_layer = 1
 collision_mask = 1
@@ -32,7 +37,7 @@ mode = 0
 mass = 1.0
 friction = 1.0
 bounce = 0.0
-gravity_scale = 8.0
+gravity_scale = 10.0
 custom_integrator = false
 continuous_cd = 0
 contacts_reported = 0
@@ -44,6 +49,7 @@ linear_damp = -1.0
 angular_velocity = 0.0
 angular_damp = -1.0
 script = ExtResource( 1 )
+_sections_unfolded = [ "Transform" ]
 __meta__ = {
 "_edit_group_": true
 }
@@ -66,5 +72,7 @@ anims/flap = SubResource( 1 )
 blend_times = [  ]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." index="2"]
+
+shape = SubResource( 2 )
 
 

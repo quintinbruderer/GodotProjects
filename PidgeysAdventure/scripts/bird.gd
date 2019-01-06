@@ -8,7 +8,7 @@ func _ready():
 	# Called when the node is added to the scene for the first time.
 	# Initialization here
 	set_process_input(true)
-	linear_velocity = Vector2(50,linear_velocity.y)
+	linear_velocity = Vector2(100,linear_velocity.y)
 
 	pass
 
@@ -16,20 +16,22 @@ func _process(delta):
 #	# Called every frame. Delta is time since last frame.
 #	# Update game logic here.
 
-	if rotation_degrees < -45:
-		rotation_degrees = -45
-		angular_velocity = 0	
-	elif rotation_degrees > 75:
-		rotation_degrees = 75
+	print(rotation_degrees)
 		
+	if get_rotation_degrees() < -30:
+		set_rotation_degrees(-30)
+		set_angular_velocity(0)
+#	elif get_rotation_degrees() > 140:
+#		set_rotation_degrees(140)
+#
 		
-	if linear_velocity.y > 0:
-		angular_velocity = 2.5
+	if get_linear_velocity().y > 0:
+		set_angular_velocity(5)
 	
 	
 func flap(): 
-	linear_velocity = Vector2(linear_velocity.x,-250)
-	angular_velocity = (-4)
+	set_linear_velocity(Vector2(get_linear_velocity().x,-300))
+	set_angular_velocity(-3)
 	pass	
 	
 func _input(event):

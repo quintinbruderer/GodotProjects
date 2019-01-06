@@ -14,6 +14,10 @@ config/name="Pidgey'sAdventures"
 run/main_scene="res://stages/FlappyBird.tscn"
 config/icon="res://icon.png"
 
+[autoload]
+
+utils="*res://scenes/utils.tscn"
+
 [display]
 
 window/size/width=288
