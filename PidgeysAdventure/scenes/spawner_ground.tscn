@@ -2,7 +2,7 @@
 
 [ext_resource path="res://scripts/spawner_ground.gd" type="Script" id=1]
 
-[node name="spawner_ground" type="Node2D" index="0"]
+[node name="spawner_ground" type="Node2D"]
 
 position = Vector2( 0, 512 )
 script = ExtResource( 1 )
