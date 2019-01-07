@@ -12,7 +12,7 @@ func _ready():
 func spawn_next_ground():
 	var new_ground_piece = ground_scene.instance()
 	new_ground_piece.position = position
-	new_ground_piece.connect('destroyed', self, 'spawn_and_move')
+	new_ground_piece.connect('destroyed_ground', self, 'spawn_and_move')
 	get_node('ground_parent_container').add_child(new_ground_piece)
 	pass
 	
