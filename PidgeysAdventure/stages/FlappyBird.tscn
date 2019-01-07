@@ -1,20 +1,15 @@
 [gd_scene load_steps=5 format=2]
 
-[ext_resource path="res://sprites/background-d.png" type="Texture" id=1]
+[ext_resource path="res://scenes/background.tscn" type="PackedScene" id=1]
 [ext_resource path="res://scripts/cameraScript.gd" type="Script" id=2]
 [ext_resource path="res://scenes/bird.tscn" type="PackedScene" id=3]
-[ext_resource path="res://scenes/ground.tscn" type="PackedScene" id=4]
+[ext_resource path="res://scenes/spawner_ground.tscn" type="PackedScene" id=4]
 
-[node name="Node" type="Node"]
+[node name="world" type="Node" index="0"]
 
-[node name="Sprite" type="Sprite" parent="." index="0"]
+[node name="background" parent="." index="0" instance=ExtResource( 1 )]
 
-texture = ExtResource( 1 )
-centered = false
-region_rect = Rect2( 77, 20, 1, 1 )
-_sections_unfolded = [ "Offset" ]
-
-[node name="Camera2D" type="Camera2D" parent="." index="1"]
+[node name="camera" type="Camera2D" parent="." index="1"]
 
 offset = Vector2( -72, 0 )
 anchor_mode = 0
@@ -43,6 +38,9 @@ script = ExtResource( 2 )
 
 [node name="birdy" parent="." index="2" instance=ExtResource( 3 )]
 
-[node name="ground" parent="." index="3" instance=ExtResource( 4 )]
+linear_damp = 0.0
+_sections_unfolded = [ "Linear", "Transform" ]
+
+[node name="spawner_ground" parent="." index="3" instance=ExtResource( 4 )]
 
 

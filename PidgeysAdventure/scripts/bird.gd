@@ -16,7 +16,6 @@ func _process(delta):
 #	# Called every frame. Delta is time since last frame.
 #	# Update game logic here.
 
-	print(rotation_degrees)
 		
 	if get_rotation_degrees() < -30:
 		set_rotation_degrees(-30)
@@ -26,7 +25,7 @@ func _process(delta):
 #
 		
 	if get_linear_velocity().y > 0:
-		set_angular_velocity(5)
+		set_angular_velocity(2)
 	
 	
 func flap(): 
