@@ -5,20 +5,21 @@ extends Node2D
 # var b = "textvar"
 
 const pipe_scene = preload('res://scenes/pipes.tscn')
-const avg_pipe_thickness = 58
-const ground_height = 165
+const avg_pipe_thickness = 62 #124/2
+const ground_height = 100
 const pipe_x_offset = 120
 const pipe_y_offset = 110
 var viewport_size
 
 func _ready():
 	viewport_size = get_viewport_rect().size
-	initial_position()
+	pass
 	
+func start():
+	initial_position()
 	for i in range(3):
 		spawn_and_move()
-	
-	pass
+	pass	
 
 func initial_position():
 	randomize()

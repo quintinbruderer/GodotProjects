@@ -17,7 +17,7 @@ func spawn_next_ground():
 	pass
 	
 func next_position():
-	position = get_position() + Vector2(480,0)
+	position = get_position() + Vector2(480,0) #480 is width of ground
 	pass
 
 func spawn_and_move():

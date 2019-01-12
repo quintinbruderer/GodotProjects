@@ -17,5 +17,5 @@ func _process(delta):
 		queue_free()
 		emit_signal('destroyed_pipes')
 		pass
-	print(cam_pos.position.x,cam_pos.get_position().x)
+	#print(cam_pos.position.x,cam_pos.get_position().x)
 	pass
