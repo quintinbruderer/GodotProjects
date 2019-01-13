@@ -13,12 +13,13 @@ var viewport_size
 
 func _ready():
 	viewport_size = get_viewport_rect().size
-	pass
-	
-func start():
 	initial_position()
 	for i in range(3):
 		spawn_and_move()
+	pass
+	
+func start():
+	
 	pass	
 
 func initial_position():

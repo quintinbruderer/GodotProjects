@@ -9,7 +9,7 @@ func _ready():
 	# Called when the node is added to the scene for the first time.
 	# Initialization here
 	set_process(true)
-	bird = utils.get_main_node().get_node('birdy')
+	bird = utils.get_main_node().get_node('pidgey')
 	pass
 
 func _process(delta):
