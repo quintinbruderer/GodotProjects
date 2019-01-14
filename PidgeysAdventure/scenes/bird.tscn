@@ -89,7 +89,7 @@ tracks/1/keys = {
 custom_solver_bias = 0.0
 radius = 15.0
 
-[node name="bird_rigid" type="RigidBody2D"]
+[node name="bird_rigid" type="RigidBody2D" index="0"]
 
 position = Vector2( 72, 200 )
 input_pickable = false
@@ -102,8 +102,8 @@ bounce = 0.0
 gravity_scale = 10.0
 custom_integrator = false
 continuous_cd = 0
-contacts_reported = 0
-contact_monitor = false
+contacts_reported = 1
+contact_monitor = true
 sleeping = false
 can_sleep = true
 linear_velocity = Vector2( 0, 0 )

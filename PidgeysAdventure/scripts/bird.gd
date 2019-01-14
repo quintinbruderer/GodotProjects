@@ -1,6 +1,7 @@
 extends RigidBody2D
 
 onready var state = StartingState.new(self)
+signal state_changed
 
 const forward_speed = 140
 const flap_height = 275
@@ -35,6 +36,8 @@ func set_new_state(new_state_num):
 		state = HitState.new(self)
 	elif new_state_num == grounded_num:
 		state = GroundedState.new(self)
+		
+	emit_signal('state_changed',self)
 	pass
 	
 func get_state():
@@ -61,6 +64,7 @@ class StartingState:
 		bird.gravity_scale = 0
 		bird.get_node('bird_anim_player').play('flying')
 		bird.linear_velocity = Vector2(forward_speed,bird.linear_velocity.y)
+	
 		pass
 	
 	func update(delta):
@@ -71,6 +75,8 @@ class StartingState:
 		
 	func exit():
 		bird.gravity_scale = play_gravity_scale
+		bird.get_node('bird_anim_player').stop()
+		bird.get_node('bird_sheet').set_position(Vector2(0,0))
 		pass
 		
 #---------------------		
@@ -81,6 +87,7 @@ class FlappingState:
 	func _init(bird):
 		self.bird = bird
 		bird.linear_velocity = Vector2(forward_speed,bird.linear_velocity.y)
+		flap()
 		pass
 	
 	func update(delta):
@@ -108,6 +115,7 @@ class FlappingState:
 		bird.set_angular_velocity(-3)
 		bird.get_node('bird_anim_player').play('flap')
 		pass	
+		
 	func exit():
 		pass		
 

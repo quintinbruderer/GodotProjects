@@ -15,52 +15,34 @@ script/source = "#(built in) button instructions
 
 extends TextureButton
 
-var button_tap
-var button_get_ready
-
+onready var button_tap = utils.get_main_node().get_node('HUD/button_instructions/tap')
+onready var button_get_ready = utils.get_main_node().get_node('HUD/button_instructions/get_ready')
+onready var tween_effect = get_node('tween_effect')
+onready var bird = utils.get_main_node().get_node('pidgey')
 
 func _ready():
-	button_tap = utils.get_main_node().get_node('HUD/button_instructions/tap')
-	button_get_ready = utils.get_main_node().get_node('HUD/button_instructions/get_ready')
 	button_get_ready.hide()
+	tween_effect.interpolate_property(self,'modulate', 
+	Color(1,1,1,1), Color(1,1,1,0),1.0,Tween.TRANS_CUBIC,Tween.EASE_IN_OUT)
 	connect('pressed', self, '_on_pressed')
 	pass
 
 func _on_pressed():
 	button_tap.hide()
 	button_get_ready.show()
-	
-	var bird = utils.get_main_node().get_node('pidgey')
-	if bird:
-		bird.set_new_state(bird.flap_num)
-	
+	tween_effect.start()	
 	pass
 #func _process(delta):
 #	
+func _on_tween_effect_tween_completed(object, key):
+	if bird:
+		bird.set_new_state(bird.flap_num)
+		
+	hide()
+	pass
 
 
 
-
-##(built in) button instructions
-#
-#extends TextureButton
-#
-#
-
-#
-#
-#func _ready():
-#	button_texture.texture = tap
-#	connect('pressed', self, '_on_pressed')
-#	pass
-#
-#func _on_pressed():
-#	var bird = utils.get_main_node().get_node('pidgey')
-#	button_texture.texture = get_ready
-#	print(button_texture.texture)
-#
-##func _process(delta):
-##	
 "
 _sections_unfolded = [ "Resource" ]
 
@@ -129,10 +111,12 @@ mouse_default_cursor_shape = 0
 size_flags_horizontal = 1
 size_flags_vertical = 1
 toggle_mode = false
+action_mode = 0
 enabled_focus_mode = 2
 shortcut = null
 group = null
 script = SubResource( 1 )
+_sections_unfolded = [ "Visibility" ]
 
 [node name="tap" type="TextureRect" parent="HUD/button_instructions" index="0"]
 
@@ -153,7 +137,6 @@ size_flags_horizontal = 1
 size_flags_vertical = 1
 texture = ExtResource( 6 )
 stretch_mode = 0
-_sections_unfolded = [ "Rect" ]
 
 [node name="get_ready" type="TextureRect" parent="HUD/button_instructions" index="1"]
 
@@ -173,5 +156,17 @@ size_flags_horizontal = 1
 size_flags_vertical = 1
 texture = ExtResource( 7 )
 stretch_mode = 0
+_sections_unfolded = [ "Visibility" ]
+
+[node name="tween_effect" type="Tween" parent="HUD/button_instructions" index="2"]
+
+repeat = false
+playback_process_mode = 1
+playback_speed = 1.0
+playback/active = false
+playback/repeat = false
+playback/speed = 1.0
+
+[connection signal="tween_completed" from="HUD/button_instructions/tween_effect" to="HUD/button_instructions" method="_on_tween_effect_tween_completed"]
 
 
