@@ -7,12 +7,14 @@ signal destroyed_ground
 func _ready():
 	cam_pos = utils.get_main_node().get_node('camera')
 	set_process(true)
+	add_to_group(game.GROUP_GROUNDS)
 	pass
 
 func _process(delta):
 	if cam_pos == null: return
 	
-	if get_global_position().x + 480 < cam_pos.get_true_pos().x:
+	if get_global_position().x + 480 + 48 < cam_pos.get_true_pos().x:
+		#48 One tilesize for backwards roll
 		queue_free()
 		emit_signal('destroyed_ground')
 		pass

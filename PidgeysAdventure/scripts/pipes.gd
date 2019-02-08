@@ -8,6 +8,7 @@ signal destroyed_pipes
 func _ready():
 	cam_pos = utils.get_main_node().get_node('camera')
 	set_process(true)
+	add_to_group(game.GROUP_PIPES)
 	pass
 
 func _process(delta):

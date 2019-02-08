@@ -2,9 +2,9 @@
 
 [ext_resource path="res://scenes/background.tscn" type="PackedScene" id=1]
 [ext_resource path="res://scripts/cameraScript.gd" type="Script" id=2]
-[ext_resource path="res://scenes/bird.tscn" type="PackedScene" id=3]
-[ext_resource path="res://scenes/spawner_pipe.tscn" type="PackedScene" id=4]
-[ext_resource path="res://scenes/spawner_ground.tscn" type="PackedScene" id=5]
+[ext_resource path="res://scenes/spawner_pipe.tscn" type="PackedScene" id=3]
+[ext_resource path="res://scenes/spawner_ground.tscn" type="PackedScene" id=4]
+[ext_resource path="res://scenes/bird.tscn" type="PackedScene" id=5]
 [ext_resource path="res://sprites/instructions.png" type="Texture" id=6]
 [ext_resource path="res://sprites/get_ready.png" type="Texture" id=7]
 
@@ -23,7 +23,7 @@ onready var bird = utils.get_main_node().get_node('pidgey')
 func _ready():
 	button_get_ready.hide()
 	tween_effect.interpolate_property(self,'modulate', 
-	Color(1,1,1,1), Color(1,1,1,0),1.0,Tween.TRANS_CUBIC,Tween.EASE_IN_OUT)
+	Color(1,1,1,1), Color(1,1,1,0),2.0,Tween.TRANS_QUAD,Tween.EASE_IN)
 	connect('pressed', self, '_on_pressed')
 	pass
 
@@ -50,8 +50,11 @@ _sections_unfolded = [ "Resource" ]
 
 [node name="background" parent="." index="0" instance=ExtResource( 1 )]
 
+scroll_ignore_camera_zoom = true
+
 [node name="camera" type="Camera2D" parent="." index="1"]
 
+visible = false
 offset = Vector2( -72, 0 )
 anchor_mode = 0
 rotating = false
@@ -77,18 +80,19 @@ editor_draw_limits = false
 editor_draw_drag_margin = false
 script = ExtResource( 2 )
 
-[node name="pidgey" parent="." index="2" instance=ExtResource( 3 )]
+[node name="spawner_pipes" parent="." index="2" instance=ExtResource( 3 )]
+
+[node name="spawner_ground" parent="." index="3" instance=ExtResource( 4 )]
+
+[node name="pidgey" parent="." index="4" instance=ExtResource( 5 )]
 
 position = Vector2( 72, 140 )
 linear_damp = 0.0
 _sections_unfolded = [ "Linear", "Transform" ]
 
-[node name="spawner_pipes" parent="." index="3" instance=ExtResource( 4 )]
-
-[node name="spawner_ground" parent="." index="4" instance=ExtResource( 5 )]
-
 [node name="HUD" type="CanvasLayer" parent="." index="5"]
 
+editor/display_folded = true
 layer = 1
 offset = Vector2( 0, 0 )
 rotation = 0.0
