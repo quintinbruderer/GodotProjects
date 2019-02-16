@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=2]
+[gd_scene load_steps=15 format=2]
 
 [ext_resource path="res://scenes/background.tscn" type="PackedScene" id=1]
 [ext_resource path="res://scripts/cameraScript.gd" type="Script" id=2]
@@ -7,8 +7,10 @@
 [ext_resource path="res://scenes/bird.tscn" type="PackedScene" id=5]
 [ext_resource path="res://sprites/instructions.png" type="Texture" id=6]
 [ext_resource path="res://sprites/get_ready.png" type="Texture" id=7]
-[ext_resource path="res://sprites/score/score.png" type="Texture" id=8]
+[ext_resource path="res://sprites/score/score-intro.png" type="Texture" id=8]
 [ext_resource path="res://fonts/pkmnrs.ttf" type="DynamicFontData" id=9]
+[ext_resource path="res://sprites/score/score-center.png" type="Texture" id=10]
+[ext_resource path="res://sprites/score/score-outro.png" type="Texture" id=11]
 
 [sub_resource type="GDScript" id=1]
 
@@ -48,6 +50,35 @@ func _on_tween_effect_tween_completed(object, key):
 "
 _sections_unfolded = [ "Resource" ]
 
+[sub_resource type="GDScript" id=4]
+
+resource_name = "score_board"
+script/source = "extends HBoxContainer
+
+const center = preload(\"res://sprites/score/score-center.png\")
+var str_score
+
+
+func _ready():
+	game.connect(\"current_score_changed\",self,\"_on_current_score_change\")
+	game.connect(\"current_score_two_digit\",self,\"_on_two_digit_change\", [], CONNECT_ONESHOT)
+	pass
+
+func _on_current_score_change():
+#	print(get_child(0).get_child(0))
+
+	for child in get_child(0).get_children():
+		child.set_text(str(game.current_score))
+	#set lbl_score to current score
+	str_score = str(game.current_score)
+	
+	pass
+func _on_two_digit_change():
+	#var texture_frame = TextureFrame.new()
+	
+	pass"
+_sections_unfolded = [ "Resource" ]
+
 [sub_resource type="DynamicFont" id=2]
 
 size = 25
@@ -55,27 +86,6 @@ use_mipmaps = false
 use_filter = false
 font_data = ExtResource( 9 )
 _sections_unfolded = [ "Extra Spacing", "Font", "Settings" ]
-
-[sub_resource type="GDScript" id=3]
-
-resource_name = "scorelabel"
-script/source = "extends Label
-
-# class member variables go here, for example:
-# var a = 2
-# var b = \"textvar\"
-
-func _ready():
-	game.connect(\"current_score_changed\",self,\"_on_current_score_change\")
-	pass
-
-#func _process(delta):
-#	# Called every frame. Delta is time since last frame.
-#	# Update game logic here.
-#	pass
-func _on_current_score_change():
-	set_text(str(game.current_score))"
-_sections_unfolded = [ "Resource" ]
 
 [node name="world" type="Node" index="0"]
 
@@ -201,7 +211,7 @@ playback/active = false
 playback/repeat = false
 playback/speed = 1.0
 
-[node name="scorebox" type="HBoxContainer" parent="HUD" index="1"]
+[node name="scoreboard" type="HBoxContainer" parent="HUD" index="1"]
 
 anchor_left = 0.0
 anchor_top = 0.0
@@ -219,16 +229,17 @@ size_flags_horizontal = 1
 size_flags_vertical = 1
 custom_constants/separation = 0
 alignment = 1
+script = SubResource( 4 )
 _sections_unfolded = [ "Margin", "custom_constants" ]
 
-[node name="score" type="TextureRect" parent="HUD/scorebox" index="0"]
+[node name="score" type="TextureRect" parent="HUD/scoreboard" index="0"]
 
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_left = 77.0
-margin_right = 202.0
+margin_right = 166.0
 margin_bottom = 54.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
@@ -240,15 +251,15 @@ texture = ExtResource( 8 )
 stretch_mode = 0
 _sections_unfolded = [ "Anchor", "Offset", "Rect", "Transform" ]
 
-[node name="lbl_score" type="Label" parent="HUD/scorebox/score" index="0"]
+[node name="lbl_score" type="Label" parent="HUD/scoreboard/score" index="0"]
 
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_left = 92.0
+margin_left = 89.0
 margin_top = 10.0
-margin_right = 188.0
+margin_right = 139.0
 margin_bottom = 34.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
@@ -259,14 +270,53 @@ size_flags_vertical = 4
 custom_fonts/font = SubResource( 2 )
 custom_colors/font_color = Color( 0, 0, 0, 1 )
 custom_constants/shadow_as_outline = 0
-text = "123"
+text = "null"
 valign = 2
 uppercase = true
 percent_visible = 1.0
 lines_skipped = 0
 max_lines_visible = -1
-script = SubResource( 3 )
-_sections_unfolded = [ "custom_colors", "custom_constants", "custom_fonts" ]
+_sections_unfolded = [ "Rect", "custom_colors", "custom_constants", "custom_fonts" ]
+
+[node name="space" type="TextureRect" parent="HUD/scoreboard" index="1"]
+
+show_behind_parent = true
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 166.0
+margin_right = 178.0
+margin_bottom = 54.0
+rect_pivot_offset = Vector2( 0, 0 )
+rect_clip_content = false
+mouse_filter = 1
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 1
+size_flags_vertical = 1
+texture = ExtResource( 10 )
+stretch_mode = 0
+_sections_unfolded = [ "Visibility" ]
+
+[node name="end" type="TextureRect" parent="HUD/scoreboard" index="2"]
+
+show_behind_parent = true
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 178.0
+margin_right = 202.0
+margin_bottom = 54.0
+rect_pivot_offset = Vector2( 0, 0 )
+rect_clip_content = false
+mouse_filter = 1
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 1
+size_flags_vertical = 1
+texture = ExtResource( 11 )
+stretch_mode = 0
+_sections_unfolded = [ "Visibility" ]
 
 [connection signal="tween_completed" from="HUD/button_instructions/tween_effect" to="HUD/button_instructions" method="_on_tween_effect_tween_completed"]
 
