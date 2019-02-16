@@ -1,0 +1,15 @@
+[remap]
+
+importer="ogg_vorbis"
+type="AudioStreamOGGVorbis"
+path="res://.import/route38.ogg-24cb9e9b646717b3327640f72a893b14.oggstr"
+
+[deps]
+
+source_file="res://audio/ogg/route38.ogg"
+dest_files=[ "res://.import/route38.ogg-24cb9e9b646717b3327640f72a893b14.oggstr" ]
+
+[params]
+
+loop=true
+loop_offset=0

@@ -1,0 +1,15 @@
+[remap]
+
+importer="ogg_vorbis"
+type="AudioStreamOGGVorbis"
+path="res://.import/gamecorner.ogg-3f52c30ca5e921f9192807047a2550a0.oggstr"
+
+[deps]
+
+source_file="res://audio/ogg/gamecorner.ogg"
+dest_files=[ "res://.import/gamecorner.ogg-3f52c30ca5e921f9192807047a2550a0.oggstr" ]
+
+[params]
+
+loop=true
+loop_offset=0

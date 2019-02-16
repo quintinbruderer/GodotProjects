@@ -2,12 +2,12 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/start-button.png-93d22cc2672efc27f8650f42e0070c15.stex"
+path="res://.import/score.png-5ea00f7d8ec05fc553ba261d58fac320.stex"
 
 [deps]
 
-source_file="res://sprites/start-button.png"
-dest_files=[ "res://.import/start-button.png-93d22cc2672efc27f8650f42e0070c15.stex" ]
+source_file="res://sprites/score/score.png"
+dest_files=[ "res://.import/score.png-5ea00f7d8ec05fc553ba261d58fac320.stex" ]
 
 [params]
 

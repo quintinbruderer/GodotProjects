@@ -1,0 +1,15 @@
+[remap]
+
+importer="ogg_vorbis"
+type="AudioStreamOGGVorbis"
+path="res://.import/medal.ogg-9c0991f0e1b5ac63e82dbb54f2b467f2.oggstr"
+
+[deps]
+
+source_file="res://audio/ogg/medal.ogg"
+dest_files=[ "res://.import/medal.ogg-9c0991f0e1b5ac63e82dbb54f2b467f2.oggstr" ]
+
+[params]
+
+loop=true
+loop_offset=0

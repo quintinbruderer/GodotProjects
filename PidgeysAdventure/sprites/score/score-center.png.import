@@ -2,12 +2,12 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/score.png-98fd24d50ea04cf57a38f70da7ca2cc1.stex"
+path="res://.import/score-center.png-4b20ce8c637302e48b347a97b55b0769.stex"
 
 [deps]
 
-source_file="res://sprites/score.png"
-dest_files=[ "res://.import/score.png-98fd24d50ea04cf57a38f70da7ca2cc1.stex" ]
+source_file="res://sprites/score/score-center.png"
+dest_files=[ "res://.import/score-center.png-4b20ce8c637302e48b347a97b55b0769.stex" ]
 
 [params]
 

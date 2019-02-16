@@ -16,6 +16,7 @@ const grounded_num = 3
 
 func _ready():
 	set_process_input(true)
+	add_to_group(game.GROUP_BIRD)
 	pass
 
 func _process(delta):

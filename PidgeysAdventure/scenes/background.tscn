@@ -4,7 +4,7 @@
 [ext_resource path="res://sprites/buildings-d.png" type="Texture" id=2]
 [ext_resource path="res://sprites/trees-d.png" type="Texture" id=3]
 
-[node name="background" type="ParallaxBackground"]
+[node name="background" type="ParallaxBackground" index="0"]
 
 layer = -1
 offset = Vector2( 0, 0 )
@@ -37,7 +37,6 @@ _sections_unfolded = [ "Animation", "Offset", "Transform" ]
 
 [node name="tempcloudlayer" type="ParallaxLayer" parent="." index="1"]
 
-editor/display_folded = true
 motion_scale = Vector2( 0.15, 1 )
 motion_offset = Vector2( 0, 0 )
 motion_mirroring = Vector2( 288, 0 )
