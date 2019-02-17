@@ -9,7 +9,7 @@ var current_score = 0	setget _set_current_score
 
 signal best_score_changed
 signal current_score_changed
-signal current_score_two_digit
+#signal current_score_two_digit
 
 func _ready():
 	set_process_input(true)

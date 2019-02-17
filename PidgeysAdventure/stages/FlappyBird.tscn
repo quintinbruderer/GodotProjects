@@ -56,25 +56,34 @@ resource_name = "score_board"
 script/source = "extends HBoxContainer
 
 const center = preload(\"res://sprites/score/score-center.png\")
-var str_score
-
+const end = preload(\"res://sprites/score/score-outro.png\")
 
 func _ready():
 	game.connect(\"current_score_changed\",self,\"_on_current_score_change\")
-	game.connect(\"current_score_two_digit\",self,\"_on_two_digit_change\", [], CONNECT_ONESHOT)
+#	game.connect(\"current_score_two_digit\",self,\"_on_two_digit_change\", [], CONNECT_ONESHOT)
+	__set_score()
+	
 	pass
 
 func _on_current_score_change():
-#	print(get_child(0).get_child(0))
-
-	for child in get_child(0).get_children():
-		child.set_text(str(game.current_score))
-	#set lbl_score to current score
-	str_score = str(game.current_score)
+	__set_score()
 	
-	pass
-func _on_two_digit_change():
-	#var texture_frame = TextureFrame.new()
+
+func __set_score():
+	get_child(0).get_child(0).set_text(str(game.current_score))
+	var str_score = str(game.current_score)	
+	
+	var board_children = get_children()
+	for i in range(1, len(board_children)):
+		get_child(i).queue_free()	
+	for j in len(str_score):
+		var center_rect = TextureRect.new()
+		center_rect.set_draw_behind_parent(true)
+		center_rect.set_texture(center)
+		add_child(center_rect)	
+	var end_rect = TextureRect.new()
+	end_rect.set_texture(end)
+	add_child(end_rect)
 	
 	pass"
 _sections_unfolded = [ "Resource" ]
@@ -257,10 +266,10 @@ anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_left = 89.0
-margin_top = 10.0
-margin_right = 139.0
-margin_bottom = 34.0
+margin_left = 91.0
+margin_top = 18.0
+margin_right = 103.0
+margin_bottom = 35.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
 mouse_filter = 2
@@ -270,13 +279,13 @@ size_flags_vertical = 4
 custom_fonts/font = SubResource( 2 )
 custom_colors/font_color = Color( 0, 0, 0, 1 )
 custom_constants/shadow_as_outline = 0
-text = "null"
+text = "0"
 valign = 2
 uppercase = true
 percent_visible = 1.0
 lines_skipped = 0
 max_lines_visible = -1
-_sections_unfolded = [ "Rect", "custom_colors", "custom_constants", "custom_fonts" ]
+_sections_unfolded = [ "custom_colors", "custom_constants" ]
 
 [node name="space" type="TextureRect" parent="HUD/scoreboard" index="1"]
 
