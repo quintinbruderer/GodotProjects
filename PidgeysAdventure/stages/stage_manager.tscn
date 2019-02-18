@@ -40,9 +40,9 @@ tracks/0/keys = {
 "values": [ Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 0 ) ]
 }
 
-[node name="stage_manager" type="CanvasLayer" index="0"]
+[node name="stage_manager" type="CanvasLayer"]
 
-layer = 1
+layer = 0
 offset = Vector2( 0, 0 )
 rotation = 0.0
 scale = Vector2( 1, 1 )
@@ -71,11 +71,11 @@ margin_right = 288.0
 margin_bottom = 512.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
-mouse_filter = 0
+mouse_filter = 2
 mouse_default_cursor_shape = 0
 size_flags_horizontal = 1
 size_flags_vertical = 1
 color = Color( 0, 0, 0, 1 )
-_sections_unfolded = [ "Visibility" ]
+_sections_unfolded = [ "Focus" ]
 
 

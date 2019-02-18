@@ -4,7 +4,7 @@ onready var state = StartingState.new(self)
 signal state_changed
 
 const forward_speed = 140
-const flap_height = 275
+const flap_height = 250
 var collider_body
 
 #---state reference numbers
@@ -112,9 +112,8 @@ class FlappingState:
 		pass
 	
 	func input(event):
-		if event is InputEventScreenTouch:
-#			print(event.pressed)
-#			print(event.is_pressed())
+		if event is InputEventScreenTouch and event.pressed:
+#			print(event)
 			flap()
 		pass
 		
@@ -129,7 +128,7 @@ class FlappingState:
 	
 	func flap(): 
 		bird.set_linear_velocity(Vector2(bird.get_linear_velocity().x,-flap_height))
-		bird.set_angular_velocity(-5)
+		bird.set_angular_velocity(-8)
 		bird.get_node('bird_anim_player').play('flap')
 		pass	
 		
