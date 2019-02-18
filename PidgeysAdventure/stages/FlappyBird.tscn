@@ -1,4 +1,4 @@
-[gd_scene load_steps=24 format=2]
+[gd_scene load_steps=25 format=2]
 
 [ext_resource path="res://scenes/background.tscn" type="PackedScene" id=1]
 [ext_resource path="res://scripts/cameraScript.gd" type="Script" id=2]
@@ -126,7 +126,7 @@ func _ready():
 
 func _on_bird_state_changed(bird):
 	if bird.get_state() == bird.grounded_num:
-		get_node('animation').play('show')
+		get_node('game_over_animation').play('show')
 	
 	pass
 #func _process(delta):
@@ -149,7 +149,7 @@ _sections_unfolded = [ "Extra Spacing", "Font", "Settings" ]
 resource_name = "game_over_current"
 script/source = "extends Label
 
-
+signal current_score_count_finished
 
 func _ready():
 	set_process(true)
@@ -157,14 +157,55 @@ func _ready():
 
 func count_to_score():
 	var lerp_time = 0
-	var lerp_duration = 2
+	var lerp_duration = .5
 	
 	while lerp_time < lerp_duration:
 		lerp_time += get_process_delta_time()
 		lerp_time = min(lerp_time,lerp_duration)
 		var percent = lerp_time/lerp_duration
 		set_text(str(int(lerp(0,game.current_score,percent))))
-		yield(get_tree(), 'idle_frame')"
+		yield(get_tree(), 'idle_frame')
+	game.best_score = game.current_score #possibly. Is checked in game.gd
+	emit_signal('current_score_count_finished')
+
+func _on_game_over_animation_animation_finished(anim_name):
+	count_to_score()
+	pass 
+"
+_sections_unfolded = [ "Resource" ]
+
+[sub_resource type="GDScript" id=10]
+
+resource_name = "game_over_best"
+script/source = "extends Label
+
+# class member variables go here, for example:
+# var a = 2
+# var b = \"textvar\"
+
+func _ready():
+	game.connect('best_score_changed', self, '_on_best_score_changed')
+	set_text(str(game.best_score))
+	pass
+
+#func _process(delta):
+#	# Called every frame. Delta is time since last frame.
+#	# Update game logic here.
+#	pass
+
+#
+func _on_best_score_changed():
+	var lerp_time = 0
+	var lerp_duration = .25
+	
+	while lerp_time < lerp_duration:
+		lerp_time += get_process_delta_time()
+		lerp_time = min(lerp_time,lerp_duration)
+		var percent = lerp_time/lerp_duration
+		set_text(str(int(lerp(game.old_best_score,game.best_score,percent))))
+		yield(get_tree(), 'idle_frame')
+	pass # replace with function body
+"
 _sections_unfolded = [ "Resource" ]
 
 [sub_resource type="GDScript" id=6]
@@ -177,9 +218,10 @@ script/source = "extends TextureButton
 # var b = \"textvar\"
 
 func _ready():
-	# Called when the node is added to the scene for the first time.
-	# Initialization here
-	
+	hide()
+	var game_over_scoreboard = utils.get_main_node().find_node(\"gameover_scoreboard\")
+	if game_over_scoreboard:
+		game_over_scoreboard.get_child(0).connect('current_score_count_finished', self, 'show')
 	pass
 
 #func _process(delta):
@@ -250,7 +292,7 @@ tracks/3/keys = {
 "values": [ Vector2( 31, 100 ), Vector2( 31, 120 ) ]
 }
 tracks/4/type = "value"
-tracks/4/path = NodePath("scoreboard:rect_position")
+tracks/4/path = NodePath("gameover_scoreboard:rect_position")
 tracks/4/interp = 1
 tracks/4/loop_wrap = true
 tracks/4/imported = false
@@ -262,18 +304,15 @@ tracks/4/keys = {
 "values": [ Vector2( 30, 510 ), Vector2( 30, 510 ), Vector2( 30, 172 ) ]
 }
 tracks/5/type = "method"
-tracks/5/path = NodePath("scoreboard/current")
+tracks/5/path = NodePath("gameover_scoreboard/current")
 tracks/5/interp = 1
 tracks/5/loop_wrap = true
 tracks/5/imported = false
 tracks/5/enabled = true
 tracks/5/keys = {
-"times": PoolRealArray( 1.2 ),
-"transitions": PoolRealArray( 1 ),
-"values": [ {
-"args": [  ],
-"method": "count_to_score"
-} ]
+"times": PoolRealArray(  ),
+"transitions": PoolRealArray(  ),
+"values": [  ]
 }
 
 [node name="world" type="Node" index="0"]
@@ -330,7 +369,6 @@ transform = Transform2D( 1, 0, 0, 1, 0, 0 )
 
 [node name="button_instructions" type="TextureButton" parent="canvas_HUD" index="0"]
 
-editor/display_folded = true
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
@@ -527,7 +565,7 @@ size_flags_vertical = 1
 script = SubResource( 5 )
 _sections_unfolded = [ "Visibility" ]
 
-[node name="scoreboard" type="TextureRect" parent="canvas_HUD/cntr_GameOver" index="0"]
+[node name="gameover_scoreboard" type="TextureRect" parent="canvas_HUD/cntr_GameOver" index="0"]
 
 anchor_left = 0.0
 anchor_top = 0.0
@@ -547,7 +585,7 @@ texture = ExtResource( 12 )
 stretch_mode = 0
 _sections_unfolded = [ "Rect" ]
 
-[node name="current" type="Label" parent="canvas_HUD/cntr_GameOver/scoreboard" index="0"]
+[node name="current" type="Label" parent="canvas_HUD/cntr_GameOver/gameover_scoreboard" index="0"]
 
 anchor_left = 0.0
 anchor_top = 0.0
@@ -566,6 +604,7 @@ size_flags_vertical = 4
 custom_fonts/font = SubResource( 8 )
 custom_colors/font_color = Color( 0, 0, 0, 1 )
 custom_colors/font_color_shadow = Color( 0, 0, 0, 0.392157 )
+text = "0"
 align = 1
 valign = 1
 percent_visible = 1.0
@@ -574,7 +613,7 @@ max_lines_visible = -1
 script = SubResource( 9 )
 _sections_unfolded = [ "custom_colors", "custom_constants", "custom_fonts", "custom_styles" ]
 
-[node name="best" type="Label" parent="canvas_HUD/cntr_GameOver/scoreboard" index="1"]
+[node name="best" type="Label" parent="canvas_HUD/cntr_GameOver/gameover_scoreboard" index="1"]
 
 anchor_left = 0.0
 anchor_top = 0.0
@@ -594,12 +633,13 @@ custom_fonts/font = SubResource( 8 )
 custom_colors/font_color = Color( 1, 0.8, 0.4, 1 )
 custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
 custom_constants/shadow_as_outline = 1
-text = "9000"
+text = "9001"
 align = 1
 valign = 1
 percent_visible = 1.0
 lines_skipped = 0
 max_lines_visible = -1
+script = SubResource( 10 )
 _sections_unfolded = [ "custom_colors", "custom_constants", "custom_fonts", "custom_styles" ]
 
 [node name="gameover" type="TextureRect" parent="canvas_HUD/cntr_GameOver" index="1"]
@@ -624,7 +664,6 @@ _sections_unfolded = [ "Rect", "Visibility" ]
 
 [node name="play" type="TextureButton" parent="canvas_HUD/cntr_GameOver" index="2"]
 
-visible = false
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
@@ -649,7 +688,7 @@ texture_pressed = ExtResource( 15 )
 script = SubResource( 6 )
 _sections_unfolded = [ "Rect", "Textures" ]
 
-[node name="animation" type="AnimationPlayer" parent="canvas_HUD/cntr_GameOver" index="3"]
+[node name="game_over_animation" type="AnimationPlayer" parent="canvas_HUD/cntr_GameOver" index="3"]
 
 root_node = NodePath("..")
 autoplay = ""
@@ -662,5 +701,7 @@ blend_times = [  ]
 [connection signal="tween_completed" from="canvas_HUD/button_instructions/tween_effect" to="canvas_HUD/button_instructions" method="_on_tween_effect_tween_completed"]
 
 [connection signal="pressed" from="canvas_HUD/cntr_GameOver/play" to="canvas_HUD/cntr_GameOver/play" method="_on_play_pressed"]
+
+[connection signal="animation_finished" from="canvas_HUD/cntr_GameOver/game_over_animation" to="canvas_HUD/cntr_GameOver/gameover_scoreboard/current" method="_on_game_over_animation_animation_finished"]
 
 
