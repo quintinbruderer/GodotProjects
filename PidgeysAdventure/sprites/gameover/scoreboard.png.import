@@ -2,12 +2,12 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/medals.png-a90fbdfa5e30aab4a52559aea4059f7c.stex"
+path="res://.import/scoreboard.png-7ba238a70154ebb0ffafa9542e796b51.stex"
 
 [deps]
 
-source_file="res://sprites/medals.png"
-dest_files=[ "res://.import/medals.png-a90fbdfa5e30aab4a52559aea4059f7c.stex" ]
+source_file="res://sprites/gameover/scoreboard.png"
+dest_files=[ "res://.import/scoreboard.png-7ba238a70154ebb0ffafa9542e796b51.stex" ]
 
 [params]
 

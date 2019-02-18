@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=2]
+[gd_scene load_steps=21 format=2]
 
 [ext_resource path="res://scenes/background.tscn" type="PackedScene" id=1]
 [ext_resource path="res://scripts/cameraScript.gd" type="Script" id=2]
@@ -11,6 +11,10 @@
 [ext_resource path="res://fonts/pkmnrs.ttf" type="DynamicFontData" id=9]
 [ext_resource path="res://sprites/score/score-center.png" type="Texture" id=10]
 [ext_resource path="res://sprites/score/score-outro.png" type="Texture" id=11]
+[ext_resource path="res://sprites/gameover/scoreboard.png" type="Texture" id=12]
+[ext_resource path="res://sprites/gameover/gameover.png" type="Texture" id=13]
+[ext_resource path="res://sprites/gameover/start-button-B.png" type="Texture" id=14]
+[ext_resource path="res://sprites/gameover/start-button-A.png" type="Texture" id=15]
 
 [sub_resource type="GDScript" id=1]
 
@@ -19,8 +23,8 @@ script/source = "#(built in) button instructions
 
 extends TextureButton
 
-onready var button_tap = utils.get_main_node().get_node('HUD/button_instructions/tap')
-onready var button_get_ready = utils.get_main_node().get_node('HUD/button_instructions/get_ready')
+onready var button_tap = utils.get_main_node().get_node('canvas_HUD/button_instructions/tap')
+onready var button_get_ready = utils.get_main_node().get_node('canvas_HUD/button_instructions/get_ready')
 onready var tween_effect = get_node('tween_effect')
 onready var bird = utils.get_main_node().get_node('pidgey')
 
@@ -59,19 +63,30 @@ const center = preload(\"res://sprites/score/score-center.png\")
 const end = preload(\"res://sprites/score/score-outro.png\")
 
 func _ready():
+	var bird = utils.get_main_node().get_node('pidgey')
+	if bird:
+		bird.connect('state_changed', self, '_on_bird_state_changed')
+	
 	game.connect(\"current_score_changed\",self,\"_on_current_score_change\")
 #	game.connect(\"current_score_two_digit\",self,\"_on_two_digit_change\", [], CONNECT_ONESHOT)
-	__set_score()
+	__set_score(game.current_score)
 	
 	pass
 
+func _on_bird_state_changed(bird):
+	if bird.get_state() == bird.flap_num:
+		show()
+	elif bird.get_state() == bird.grounded_num:
+		hide()
+	pass
+
 func _on_current_score_change():
-	__set_score()
+	__set_score(game.current_score)
 	
 
-func __set_score():
-	get_child(0).get_child(0).set_text(str(game.current_score))
-	var str_score = str(game.current_score)	
+func __set_score(score_num):
+	get_child(0).get_child(0).set_text(str(score_num))
+	var str_score = str(score_num)	
 	
 	var board_children = get_children()
 	for i in range(1, len(board_children)):
@@ -95,6 +110,57 @@ use_mipmaps = false
 use_filter = false
 font_data = ExtResource( 9 )
 _sections_unfolded = [ "Extra Spacing", "Font", "Settings" ]
+
+[sub_resource type="GDScript" id=5]
+
+resource_name = "game_over"
+script/source = "extends Container
+
+
+func _ready():
+	var bird = utils.get_main_node().get_node('pidgey')
+	if bird:
+		bird.connect('state_changed', self, '_on_bird_state_changed')
+		
+	pass
+
+func _on_bird_state_changed(bird):
+	if bird.get_state() == bird.grounded_num:
+		show()
+	
+	pass
+#func _process(delta):
+#	# Called every frame. Delta is time since last frame.
+#	# Update game logic here.
+#	pass
+"
+_sections_unfolded = [ "Resource" ]
+
+[sub_resource type="GDScript" id=6]
+
+resource_name = "play_button"
+script/source = "extends TextureButton
+
+# class member variables go here, for example:
+# var a = 2
+# var b = \"textvar\"
+
+func _ready():
+	# Called when the node is added to the scene for the first time.
+	# Initialization here
+	pass
+
+#func _process(delta):
+#	# Called every frame. Delta is time since last frame.
+#	# Update game logic here.
+#	pass
+
+
+func _on_play_pressed():
+	stage_manager.reset_stage(stage_manager.stage_game)
+	pass # replace with function body
+"
+_sections_unfolded = [ "Resource" ]
 
 [node name="world" type="Node" index="0"]
 
@@ -140,7 +206,7 @@ position = Vector2( 72, 140 )
 linear_damp = 0.0
 _sections_unfolded = [ "Linear", "Transform" ]
 
-[node name="HUD" type="CanvasLayer" parent="." index="5"]
+[node name="canvas_HUD" type="CanvasLayer" parent="." index="5"]
 
 layer = 1
 offset = Vector2( 0, 0 )
@@ -148,8 +214,9 @@ rotation = 0.0
 scale = Vector2( 1, 1 )
 transform = Transform2D( 1, 0, 0, 1, 0, 0 )
 
-[node name="button_instructions" type="TextureButton" parent="HUD" index="0"]
+[node name="button_instructions" type="TextureButton" parent="canvas_HUD" index="0"]
 
+editor/display_folded = true
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
@@ -171,7 +238,7 @@ group = null
 script = SubResource( 1 )
 _sections_unfolded = [ "Size Flags", "Visibility" ]
 
-[node name="tap" type="TextureRect" parent="HUD/button_instructions" index="0"]
+[node name="tap" type="TextureRect" parent="canvas_HUD/button_instructions" index="0"]
 
 show_behind_parent = true
 anchor_left = 0.0
@@ -191,7 +258,7 @@ size_flags_vertical = 1
 texture = ExtResource( 6 )
 stretch_mode = 0
 
-[node name="get_ready" type="TextureRect" parent="HUD/button_instructions" index="1"]
+[node name="get_ready" type="TextureRect" parent="canvas_HUD/button_instructions" index="1"]
 
 anchor_left = 0.0
 anchor_top = 0.0
@@ -211,7 +278,7 @@ texture = ExtResource( 7 )
 stretch_mode = 0
 _sections_unfolded = [ "Visibility" ]
 
-[node name="tween_effect" type="Tween" parent="HUD/button_instructions" index="2"]
+[node name="tween_effect" type="Tween" parent="canvas_HUD/button_instructions" index="2"]
 
 repeat = false
 playback_process_mode = 1
@@ -220,8 +287,10 @@ playback/active = false
 playback/repeat = false
 playback/speed = 1.0
 
-[node name="scoreboard" type="HBoxContainer" parent="HUD" index="1"]
+[node name="scoreboard" type="HBoxContainer" parent="canvas_HUD" index="1"]
 
+editor/display_folded = true
+visible = false
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
@@ -241,7 +310,7 @@ alignment = 1
 script = SubResource( 4 )
 _sections_unfolded = [ "Margin", "custom_constants" ]
 
-[node name="score" type="TextureRect" parent="HUD/scoreboard" index="0"]
+[node name="score" type="TextureRect" parent="canvas_HUD/scoreboard" index="0"]
 
 anchor_left = 0.0
 anchor_top = 0.0
@@ -260,7 +329,7 @@ texture = ExtResource( 8 )
 stretch_mode = 0
 _sections_unfolded = [ "Anchor", "Offset", "Rect", "Transform" ]
 
-[node name="lbl_score" type="Label" parent="HUD/scoreboard/score" index="0"]
+[node name="lbl_score" type="Label" parent="canvas_HUD/scoreboard/score" index="0"]
 
 anchor_left = 0.0
 anchor_top = 0.0
@@ -287,7 +356,7 @@ lines_skipped = 0
 max_lines_visible = -1
 _sections_unfolded = [ "custom_colors", "custom_constants" ]
 
-[node name="space" type="TextureRect" parent="HUD/scoreboard" index="1"]
+[node name="space" type="TextureRect" parent="canvas_HUD/scoreboard" index="1"]
 
 show_behind_parent = true
 anchor_left = 0.0
@@ -307,7 +376,7 @@ texture = ExtResource( 10 )
 stretch_mode = 0
 _sections_unfolded = [ "Visibility" ]
 
-[node name="end" type="TextureRect" parent="HUD/scoreboard" index="2"]
+[node name="end" type="TextureRect" parent="canvas_HUD/scoreboard" index="2"]
 
 show_behind_parent = true
 anchor_left = 0.0
@@ -327,6 +396,91 @@ texture = ExtResource( 11 )
 stretch_mode = 0
 _sections_unfolded = [ "Visibility" ]
 
-[connection signal="tween_completed" from="HUD/button_instructions/tween_effect" to="HUD/button_instructions" method="_on_tween_effect_tween_completed"]
+[node name="cntr_GameOver" type="Container" parent="canvas_HUD" index="2"]
+
+editor/display_folded = true
+visible = false
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+rect_pivot_offset = Vector2( 0, 0 )
+rect_clip_content = false
+mouse_filter = 0
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 1
+size_flags_vertical = 1
+script = SubResource( 5 )
+_sections_unfolded = [ "Rect" ]
+
+[node name="scoreboard" type="TextureRect" parent="canvas_HUD/cntr_GameOver" index="0"]
+
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 30.0
+margin_top = 172.0
+margin_right = 256.0
+margin_bottom = 286.0
+rect_pivot_offset = Vector2( 0, 0 )
+rect_clip_content = false
+mouse_filter = 1
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 1
+size_flags_vertical = 1
+texture = ExtResource( 12 )
+stretch_mode = 0
+_sections_unfolded = [ "Rect" ]
+
+[node name="gameover" type="TextureRect" parent="canvas_HUD/cntr_GameOver" index="1"]
+
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 31.0
+margin_top = 120.0
+margin_right = 281.0
+margin_bottom = 192.0
+rect_pivot_offset = Vector2( 0, 0 )
+rect_clip_content = false
+mouse_filter = 1
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 1
+size_flags_vertical = 1
+texture = ExtResource( 13 )
+stretch_mode = 0
+_sections_unfolded = [ "Rect" ]
+
+[node name="play" type="TextureButton" parent="canvas_HUD/cntr_GameOver" index="2"]
+
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 92.0
+margin_top = 300.0
+margin_right = 196.0
+margin_bottom = 358.0
+rect_pivot_offset = Vector2( 0, 0 )
+rect_clip_content = false
+focus_mode = 2
+mouse_filter = 0
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 1
+size_flags_vertical = 1
+toggle_mode = false
+enabled_focus_mode = 2
+shortcut = null
+group = null
+texture_normal = ExtResource( 14 )
+texture_pressed = ExtResource( 15 )
+script = SubResource( 6 )
+_sections_unfolded = [ "Rect", "Textures" ]
+
+[connection signal="tween_completed" from="canvas_HUD/button_instructions/tween_effect" to="canvas_HUD/button_instructions" method="_on_tween_effect_tween_completed"]
+
+[connection signal="pressed" from="canvas_HUD/cntr_GameOver/play" to="canvas_HUD/cntr_GameOver/play" method="_on_play_pressed"]
 
 

@@ -2,12 +2,12 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/start-button-B.png-28d4c02bc08edaf6bd887179fc31bb88.stex"
+path="res://.import/start-button-B.png-edd146d3ebf5a1ef8a4d06a3e9ffda69.stex"
 
 [deps]
 
-source_file="res://start-button-B.png"
-dest_files=[ "res://.import/start-button-B.png-28d4c02bc08edaf6bd887179fc31bb88.stex" ]
+source_file="res://sprites/gameover/start-button-B.png"
+dest_files=[ "res://.import/start-button-B.png-edd146d3ebf5a1ef8a4d06a3e9ffda69.stex" ]
 
 [params]
 
