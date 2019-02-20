@@ -8,6 +8,11 @@ var old_best_score = 0
 var best_score = 0 setget _set_best_score
 var current_score = 0	setget _set_current_score
 
+const bronze_score = 1
+const silver_score = 2
+const gold_score = 3
+const platinum_score = 4
+
 signal best_score_changed
 signal current_score_changed
 #signal current_score_two_digit

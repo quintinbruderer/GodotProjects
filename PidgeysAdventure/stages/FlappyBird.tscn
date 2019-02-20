@@ -1,4 +1,4 @@
-[gd_scene load_steps=25 format=2]
+[gd_scene load_steps=32 format=2]
 
 [ext_resource path="res://scenes/background.tscn" type="PackedScene" id=1]
 [ext_resource path="res://scripts/cameraScript.gd" type="Script" id=2]
@@ -12,9 +12,11 @@
 [ext_resource path="res://sprites/score/score-center.png" type="Texture" id=10]
 [ext_resource path="res://sprites/score/score-outro.png" type="Texture" id=11]
 [ext_resource path="res://sprites/gameover/scoreboard.png" type="Texture" id=12]
-[ext_resource path="res://sprites/gameover/gameover.png" type="Texture" id=13]
-[ext_resource path="res://sprites/gameover/start-button-B.png" type="Texture" id=14]
-[ext_resource path="res://sprites/gameover/start-button-A.png" type="Texture" id=15]
+[ext_resource path="res://sprites/gameover/particle.png" type="Texture" id=13]
+[ext_resource path="res://sprites/gameover/medals.png" type="Texture" id=14]
+[ext_resource path="res://sprites/gameover/gameover.png" type="Texture" id=15]
+[ext_resource path="res://sprites/gameover/start-button-B.png" type="Texture" id=16]
+[ext_resource path="res://sprites/gameover/start-button-A.png" type="Texture" id=17]
 
 [sub_resource type="GDScript" id=1]
 
@@ -29,6 +31,7 @@ onready var tween_effect = get_node('tween_effect')
 onready var bird = utils.get_main_node().get_node('pidgey')
 
 func _ready():
+	show()
 	button_get_ready.hide()
 	
 	tween_effect.interpolate_property(self,'modulate', 
@@ -54,7 +57,7 @@ func _on_tween_effect_tween_completed(object, key):
 "
 _sections_unfolded = [ "Resource" ]
 
-[sub_resource type="GDScript" id=4]
+[sub_resource type="GDScript" id=2]
 
 resource_name = "score_board"
 script/source = "extends HBoxContainer
@@ -63,6 +66,7 @@ const center = preload(\"res://sprites/score/score-center.png\")
 const end = preload(\"res://sprites/score/score-outro.png\")
 
 func _ready():
+	show()
 	var bird = utils.get_main_node().get_node('pidgey')
 	if bird:
 		bird.connect('state_changed', self, '_on_bird_state_changed')
@@ -95,15 +99,17 @@ func __set_score(score_num):
 		var center_rect = TextureRect.new()
 		center_rect.set_draw_behind_parent(true)
 		center_rect.set_texture(center)
+		center_rect.set_mouse_filter(2)
 		add_child(center_rect)	
 	var end_rect = TextureRect.new()
 	end_rect.set_texture(end)
+	end_rect.set_mouse_filter(2)
 	add_child(end_rect)
 	
 	pass"
 _sections_unfolded = [ "Resource" ]
 
-[sub_resource type="DynamicFont" id=2]
+[sub_resource type="DynamicFont" id=3]
 
 size = 25
 use_mipmaps = false
@@ -111,13 +117,14 @@ use_filter = false
 font_data = ExtResource( 9 )
 _sections_unfolded = [ "Extra Spacing", "Font", "Settings" ]
 
-[sub_resource type="GDScript" id=5]
+[sub_resource type="GDScript" id=4]
 
 resource_name = "game_over"
 script/source = "extends Container
 
 
 func _ready():
+	hide()
 	var bird = utils.get_main_node().get_node('pidgey')
 	if bird:
 		bird.connect('state_changed', self, '_on_bird_state_changed')
@@ -136,7 +143,7 @@ func _on_bird_state_changed(bird):
 "
 _sections_unfolded = [ "Resource" ]
 
-[sub_resource type="DynamicFont" id=8]
+[sub_resource type="DynamicFont" id=5]
 
 size = 25
 use_mipmaps = false
@@ -144,7 +151,7 @@ use_filter = false
 font_data = ExtResource( 9 )
 _sections_unfolded = [ "Extra Spacing", "Font", "Settings" ]
 
-[sub_resource type="GDScript" id=9]
+[sub_resource type="GDScript" id=6]
 
 resource_name = "game_over_current"
 script/source = "extends Label
@@ -174,7 +181,7 @@ func _on_game_over_animation_animation_finished(anim_name):
 "
 _sections_unfolded = [ "Resource" ]
 
-[sub_resource type="GDScript" id=10]
+[sub_resource type="GDScript" id=7]
 
 resource_name = "game_over_best"
 script/source = "extends Label
@@ -208,9 +215,200 @@ func _on_best_score_changed():
 "
 _sections_unfolded = [ "Resource" ]
 
-[sub_resource type="GDScript" id=6]
+[sub_resource type="GDScript" id=13]
 
-resource_name = "play_button"
+resource_name = "score_sparkle"
+script/source = "extends Sprite
+
+# class member variables go here, for example:
+# var a = 2
+# var b = \"textvar\"
+const medal_radius = 22
+
+func _ready():
+	var current_score = utils.get_main_node().find_node('current')
+	if current_score:
+		current_score.connect('current_score_count_finished',get_child(0),'play',['sparkle'])
+	pass
+"
+_sections_unfolded = [ "Resource" ]
+
+[sub_resource type="Animation" id=14]
+
+resource_name = "sparkle"
+length = 1.0
+loop = true
+step = 0.1
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:rotation_degrees")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.3, 0.6 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 0,
+"values": [ -65.0, 0.0, 65.0 ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath(".:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 0.3, 0.6 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 0,
+"values": [ Vector2( 1e-05, 1e-05 ), Vector2( 0.8, 0.8 ), Vector2( 1e-05, 1e-05 ) ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath(".:modulate")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0, 0.3, 0.6 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 0,
+"values": [ Color( 0.666667, 0.764706, 1, 1 ), Color( 1, 1, 1, 1 ), Color( 0.666667, 0.764706, 1, 1 ) ]
+}
+tracks/3/type = "method"
+tracks/3/path = NodePath(".")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/keys = {
+"times": PoolRealArray( 0.6 ),
+"transitions": PoolRealArray( 1 ),
+"values": [ {
+"args": [  ],
+"method": "_random_position"
+} ]
+}
+
+[sub_resource type="GDScript" id=10]
+
+resource_name = "medals"
+script/source = "extends Sprite
+
+# class member variables go here, for example:
+# var a = 2
+# var b = \"textvar\"
+
+func _ready():
+	hide()
+	var current_score = get_parent().find_node('current')
+	if current_score:
+		current_score.connect('current_score_count_finished',self,'show_medal')
+	pass
+
+func show_medal():
+	if game.current_score >= game.bronze_score:
+		if game.current_score >= game.platinum_score:
+			set_frame(0)
+		elif game.current_score >= game.gold_score:
+			set_frame(1)
+		elif game.current_score >= game.silver_score:
+			set_frame(2)
+		else:
+			set_frame(3)
+		show()
+	pass"
+_sections_unfolded = [ "Resource" ]
+
+[sub_resource type="GDScript" id=11]
+
+resource_name = "medal_sparkle"
+script/source = "extends Sprite
+
+# class member variables go here, for example:
+# var a = 2
+# var b = \"textvar\"
+const medal_radius = 22
+var randx
+var randy
+
+func _ready():
+	_random_position()
+	get_child(0).play('sparkle')
+	pass
+
+#func _process(delta):
+#	# Called every frame. Delta is time since last frame.
+#	# Update game logic here.
+#	pass
+
+
+func _random_position():
+	randomize()
+	randx = rand_range(-medal_radius,medal_radius)
+	randy = rand_range(-medal_radius,medal_radius)
+	set_position(Vector2(randx,randy))"
+_sections_unfolded = [ "Resource" ]
+
+[sub_resource type="Animation" id=12]
+
+resource_name = "sparkle"
+length = 0.6
+loop = true
+step = 0.1
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:rotation_degrees")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.2, 0.4 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 0,
+"values": [ 65.0, 0.0, -65.0 ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath(".:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 0.2, 0.4 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 0,
+"values": [ Vector2( 1e-05, 1e-05 ), Vector2( 1, 1 ), Vector2( 1e-05, 1e-05 ) ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath(".:modulate")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0, 0.2, 0.4 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 0,
+"values": [ Color( 1, 0.683333, 0.688863, 1 ), Color( 1, 1, 1, 1 ), Color( 1, 0.683333, 0.688863, 1 ) ]
+}
+tracks/3/type = "method"
+tracks/3/path = NodePath(".")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/keys = {
+"times": PoolRealArray( 0.4 ),
+"transitions": PoolRealArray( 1 ),
+"values": [ {
+"args": [  ],
+"method": "_random_position"
+} ]
+}
+
+[sub_resource type="GDScript" id=8]
+
 script/source = "extends TextureButton
 
 # class member variables go here, for example:
@@ -237,9 +435,8 @@ func _on_play_pressed():
 "
 _sections_unfolded = [ "Resource" ]
 
-[sub_resource type="Animation" id=7]
+[sub_resource type="Animation" id=9]
 
-resource_name = "show"
 length = 1.5
 loop = false
 step = 0.1
@@ -369,6 +566,8 @@ transform = Transform2D( 1, 0, 0, 1, 0, 0 )
 
 [node name="button_instructions" type="TextureButton" parent="canvas_HUD" index="0"]
 
+editor/display_folded = true
+visible = false
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
@@ -454,14 +653,14 @@ margin_bottom = 464.0
 rect_min_size = Vector2( 125, 54 )
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
-mouse_filter = 1
+mouse_filter = 2
 mouse_default_cursor_shape = 0
 size_flags_horizontal = 1
 size_flags_vertical = 1
 custom_constants/separation = 0
 alignment = 1
-script = SubResource( 4 )
-_sections_unfolded = [ "Margin", "custom_constants" ]
+script = SubResource( 2 )
+_sections_unfolded = [ "Margin", "Mouse", "custom_constants" ]
 
 [node name="score" type="TextureRect" parent="canvas_HUD/scoreboard" index="0"]
 
@@ -474,7 +673,7 @@ margin_right = 166.0
 margin_bottom = 54.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
-mouse_filter = 1
+mouse_filter = 2
 mouse_default_cursor_shape = 0
 size_flags_horizontal = 1
 size_flags_vertical = 1
@@ -498,7 +697,7 @@ mouse_filter = 2
 mouse_default_cursor_shape = 0
 size_flags_horizontal = 1
 size_flags_vertical = 4
-custom_fonts/font = SubResource( 2 )
+custom_fonts/font = SubResource( 3 )
 custom_colors/font_color = Color( 0, 0, 0, 1 )
 custom_constants/shadow_as_outline = 0
 text = "0"
@@ -507,7 +706,7 @@ uppercase = true
 percent_visible = 1.0
 lines_skipped = 0
 max_lines_visible = -1
-_sections_unfolded = [ "custom_colors", "custom_constants" ]
+_sections_unfolded = [ "Mouse", "custom_colors", "custom_constants" ]
 
 [node name="space" type="TextureRect" parent="canvas_HUD/scoreboard" index="1"]
 
@@ -521,13 +720,13 @@ margin_right = 178.0
 margin_bottom = 54.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
-mouse_filter = 1
+mouse_filter = 2
 mouse_default_cursor_shape = 0
 size_flags_horizontal = 1
 size_flags_vertical = 1
 texture = ExtResource( 10 )
 stretch_mode = 0
-_sections_unfolded = [ "Visibility" ]
+_sections_unfolded = [ "Mouse", "Visibility" ]
 
 [node name="end" type="TextureRect" parent="canvas_HUD/scoreboard" index="2"]
 
@@ -541,17 +740,17 @@ margin_right = 202.0
 margin_bottom = 54.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
-mouse_filter = 1
+mouse_filter = 2
 mouse_default_cursor_shape = 0
 size_flags_horizontal = 1
 size_flags_vertical = 1
 texture = ExtResource( 11 )
 stretch_mode = 0
-_sections_unfolded = [ "Visibility" ]
+_sections_unfolded = [ "Mouse", "Visibility" ]
 
 [node name="cntr_GameOver" type="Container" parent="canvas_HUD" index="2"]
 
-visible = false
+editor/display_folded = true
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
@@ -562,7 +761,7 @@ mouse_filter = 0
 mouse_default_cursor_shape = 0
 size_flags_horizontal = 1
 size_flags_vertical = 1
-script = SubResource( 5 )
+script = SubResource( 4 )
 _sections_unfolded = [ "Visibility" ]
 
 [node name="gameover_scoreboard" type="TextureRect" parent="canvas_HUD/cntr_GameOver" index="0"]
@@ -601,7 +800,7 @@ mouse_filter = 2
 mouse_default_cursor_shape = 0
 size_flags_horizontal = 1
 size_flags_vertical = 4
-custom_fonts/font = SubResource( 8 )
+custom_fonts/font = SubResource( 5 )
 custom_colors/font_color = Color( 0, 0, 0, 1 )
 custom_colors/font_color_shadow = Color( 0, 0, 0, 0.392157 )
 text = "0"
@@ -610,11 +809,12 @@ valign = 1
 percent_visible = 1.0
 lines_skipped = 0
 max_lines_visible = -1
-script = SubResource( 9 )
+script = SubResource( 6 )
 _sections_unfolded = [ "custom_colors", "custom_constants", "custom_fonts", "custom_styles" ]
 
 [node name="best" type="Label" parent="canvas_HUD/cntr_GameOver/gameover_scoreboard" index="1"]
 
+editor/display_folded = true
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
@@ -629,7 +829,7 @@ mouse_filter = 2
 mouse_default_cursor_shape = 0
 size_flags_horizontal = 1
 size_flags_vertical = 4
-custom_fonts/font = SubResource( 8 )
+custom_fonts/font = SubResource( 5 )
 custom_colors/font_color = Color( 1, 0.8, 0.4, 1 )
 custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
 custom_constants/shadow_as_outline = 1
@@ -639,8 +839,58 @@ valign = 1
 percent_visible = 1.0
 lines_skipped = 0
 max_lines_visible = -1
-script = SubResource( 10 )
+script = SubResource( 7 )
 _sections_unfolded = [ "custom_colors", "custom_constants", "custom_fonts", "custom_styles" ]
+
+[node name="score_particle" type="Sprite" parent="canvas_HUD/cntr_GameOver/gameover_scoreboard/best" index="0"]
+
+editor/display_folded = true
+modulate = Color( 0.666667, 0.764706, 1, 1 )
+position = Vector2( 30.6225, -2.88335 )
+rotation = 0.936194
+scale = Vector2( 1e-05, 1e-05 )
+texture = ExtResource( 13 )
+script = SubResource( 13 )
+_sections_unfolded = [ "Visibility" ]
+
+[node name="sparkle" type="AnimationPlayer" parent="canvas_HUD/cntr_GameOver/gameover_scoreboard/best/score_particle" index="0"]
+
+root_node = NodePath("..")
+autoplay = ""
+playback_process_mode = 1
+playback_default_blend_time = 0.0
+playback_speed = 1.0
+anims/sparkle = SubResource( 14 )
+blend_times = [  ]
+_sections_unfolded = [ "Playback Options" ]
+
+[node name="medals" type="Sprite" parent="canvas_HUD/cntr_GameOver/gameover_scoreboard" index="2"]
+
+editor/display_folded = true
+position = Vector2( 48, 65 )
+texture = ExtResource( 14 )
+vframes = 4
+script = SubResource( 10 )
+_sections_unfolded = [ "Animation", "Visibility" ]
+
+[node name="medal_particle" type="Sprite" parent="canvas_HUD/cntr_GameOver/gameover_scoreboard/medals" index="0"]
+
+modulate = Color( 1, 0.683333, 0.688863, 1 )
+rotation = -1.13446
+scale = Vector2( 1e-05, 1e-05 )
+texture = ExtResource( 13 )
+script = SubResource( 11 )
+_sections_unfolded = [ "Transform", "Visibility" ]
+
+[node name="sparkle" type="AnimationPlayer" parent="canvas_HUD/cntr_GameOver/gameover_scoreboard/medals/medal_particle" index="0"]
+
+root_node = NodePath("..")
+autoplay = ""
+playback_process_mode = 1
+playback_default_blend_time = 0.0
+playback_speed = 1.0
+anims/sparkle = SubResource( 12 )
+blend_times = [  ]
 
 [node name="gameover" type="TextureRect" parent="canvas_HUD/cntr_GameOver" index="1"]
 
@@ -658,7 +908,7 @@ mouse_filter = 1
 mouse_default_cursor_shape = 0
 size_flags_horizontal = 1
 size_flags_vertical = 1
-texture = ExtResource( 13 )
+texture = ExtResource( 15 )
 stretch_mode = 0
 _sections_unfolded = [ "Rect", "Visibility" ]
 
@@ -683,9 +933,9 @@ toggle_mode = false
 enabled_focus_mode = 2
 shortcut = null
 group = null
-texture_normal = ExtResource( 14 )
-texture_pressed = ExtResource( 15 )
-script = SubResource( 6 )
+texture_normal = ExtResource( 16 )
+texture_pressed = ExtResource( 17 )
+script = SubResource( 8 )
 _sections_unfolded = [ "Rect", "Textures" ]
 
 [node name="game_over_animation" type="AnimationPlayer" parent="canvas_HUD/cntr_GameOver" index="3"]
@@ -695,7 +945,7 @@ autoplay = ""
 playback_process_mode = 1
 playback_default_blend_time = 0.0
 playback_speed = 1.0
-anims/show = SubResource( 7 )
+anims/show = SubResource( 9 )
 blend_times = [  ]
 
 [connection signal="tween_completed" from="canvas_HUD/button_instructions/tween_effect" to="canvas_HUD/button_instructions" method="_on_tween_effect_tween_completed"]
