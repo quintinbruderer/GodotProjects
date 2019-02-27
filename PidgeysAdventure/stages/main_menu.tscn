@@ -1,0 +1,235 @@
+[gd_scene load_steps=11 format=2]
+
+[ext_resource path="res://scripts/main_menu.gd" type="Script" id=1]
+[ext_resource path="res://sprites/Title/title.png" type="Texture" id=2]
+[ext_resource path="res://sprites/Title/flying.png" type="Texture" id=3]
+[ext_resource path="res://sprites/Title/talking.png" type="Texture" id=4]
+[ext_resource path="res://sprites/burd.png" type="Texture" id=5]
+[ext_resource path="res://sprites/gameover/start-button-B.png" type="Texture" id=6]
+[ext_resource path="res://sprites/gameover/start-button-A.png" type="Texture" id=7]
+
+[sub_resource type="Animation" id=1]
+
+resource_name = "flying"
+length = 0.8
+loop = true
+step = 0.1
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.3, 0.4, 0.6, 0.8 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1 ),
+"update": 1,
+"values": [ 0, 1, 2, 1, 0 ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath(".:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0.4, 0.8 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Vector2( -74, 42 ), Vector2( -74, 38 ) ]
+}
+
+[sub_resource type="Animation" id=2]
+
+resource_name = "talking"
+length = 0.8
+loop = true
+step = 0.1
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.1, 0.2, 0.4, 0.5 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1 ),
+"update": 1,
+"values": [ 0, 1, 0, 1, 0 ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath(".:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 0.1, 0.3, 0.5, 0.6, 0.8 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1 ),
+"update": 0,
+"values": [ Vector2( 82, -32 ), Vector2( 82, -34 ), Vector2( 82, -32 ), Vector2( 82, -32 ), Vector2( 82, -34 ), Vector2( 82, -32 ) ]
+}
+
+[sub_resource type="Animation" id=3]
+
+resource_name = "menu_flying"
+length = 8.0
+loop = true
+step = 0.1
+tracks/0/type = "value"
+tracks/0/path = NodePath("..:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.15, 0.3, 0.4, 0.5, 0.6, 1, 1.15, 1.3, 1.4, 1.5, 1.6, 2, 2.15, 2.3, 2.4, 2.5, 2.6, 3, 3.15, 3.3, 3.4, 3.5, 3.6, 4, 4.15, 4.3, 4.4, 4.5, 4.6, 5, 5.15, 5.3, 5.4, 5.5, 5.6, 6, 6.15, 6.3, 6.4, 6.5, 6.6, 7, 7.15, 7.3, 7.4, 7.5, 7.6, 8 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 ),
+"update": 0,
+"values": [ 0, 2, 0, 2, 0, 2, 0, 2, 0, 2, 0, 2, 0, 2, 0, 2, 0, 2, 0, 2, 0, 2, 0, 2, 0, 2, 0, 2, 0, 2, 0, 2, 0, 2, 0, 2, 0, 2, 0, 2, 0, 2, 0, 2, 0, 2, 0, 2, 0 ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("..:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5, 5.5, 6, 6.5, 7, 7.5, 8 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 ),
+"update": 0,
+"values": [ Vector2( 0, 0 ), Vector2( 0, -20 ), Vector2( 0, 0 ), Vector2( 0, -20 ), Vector2( 0, 0 ), Vector2( 0, -20 ), Vector2( 0, 0 ), Vector2( 0, -20 ), Vector2( 0, 0 ), Vector2( 0, -20 ), Vector2( 0, 0 ), Vector2( 0, -20 ), Vector2( 0, 0 ), Vector2( 0, -20 ), Vector2( 0, 0 ), Vector2( 0, -20 ), Vector2( 0, 0 ) ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("..:rotation_degrees")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0, 0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5, 5.5, 6, 6.5, 7, 7.5, 8 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 ),
+"update": 0,
+"values": [ 50.0, -40.0, 50.0, -40.0, 50.0, -40.0, 50.0, -40.0, 50.0, -40.0, 50.0, -40.0, 50.0, -40.0, 50.0, -40.0, 50.0 ]
+}
+tracks/3/type = "value"
+tracks/3/path = NodePath("../..:position")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/keys = {
+"times": PoolRealArray( 0, 8 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Vector2( -20, 360 ), Vector2( 308, 360 ) ]
+}
+
+[node name="main_menu" type="CanvasLayer" index="0"]
+
+layer = 1
+offset = Vector2( 0, 0 )
+rotation = 0.0
+scale = Vector2( 1, 1 )
+transform = Transform2D( 1, 0, 0, 1, 0, 0 )
+script = ExtResource( 1 )
+_sections_unfolded = [ "Pause" ]
+
+[node name="title" type="Sprite" parent="." index="0"]
+
+editor/display_folded = true
+position = Vector2( 144, 170 )
+texture = ExtResource( 2 )
+
+[node name="flying" type="Sprite" parent="title" index="0"]
+
+editor/display_folded = true
+position = Vector2( -74, 41.703 )
+texture = ExtResource( 3 )
+hframes = 3
+frame = 2
+_sections_unfolded = [ "Animation", "Transform" ]
+
+[node name="flying_player" type="AnimationPlayer" parent="title/flying" index="0"]
+
+root_node = NodePath("..")
+autoplay = "flying"
+playback_process_mode = 1
+playback_default_blend_time = 0.0
+playback_speed = 1.5
+anims/flying = SubResource( 1 )
+blend_times = [  ]
+_sections_unfolded = [ "Playback Options" ]
+
+[node name="talking" type="Sprite" parent="title" index="1"]
+
+editor/display_folded = true
+position = Vector2( 82, -32.42 )
+texture = ExtResource( 4 )
+hframes = 2
+_sections_unfolded = [ "Animation", "Transform" ]
+
+[node name="talking_player" type="AnimationPlayer" parent="title/talking" index="0"]
+
+root_node = NodePath("..")
+autoplay = "talking"
+playback_process_mode = 1
+playback_default_blend_time = 0.0
+playback_speed = 1.5
+anims/talking = SubResource( 2 )
+blend_times = [  ]
+_sections_unfolded = [ "Playback Options" ]
+
+[node name="pidgey2dNode" type="Node2D" parent="." index="1"]
+
+editor/display_folded = true
+position = Vector2( -20, 360 )
+rotation = -0.563867
+_sections_unfolded = [ "Transform" ]
+
+[node name="pidgeysprite" type="Sprite" parent="pidgey2dNode" index="0"]
+
+rotation = 0.872665
+texture = ExtResource( 5 )
+hframes = 3
+_sections_unfolded = [ "Animation", "Offset", "Transform" ]
+
+[node name="pidgey_flying" type="AnimationPlayer" parent="pidgey2dNode/pidgeysprite" index="0"]
+
+root_node = NodePath("")
+autoplay = "menu_flying"
+playback_process_mode = 1
+playback_default_blend_time = 0.0
+playback_speed = 2.0
+anims/menu_flying = SubResource( 3 )
+blend_times = [  ]
+_sections_unfolded = [ "Playback Options" ]
+
+[node name="menu_play" type="TextureButton" parent="." index="2"]
+
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 92.0
+margin_top = 260.0
+margin_right = 196.0
+margin_bottom = 318.0
+rect_pivot_offset = Vector2( 0, 0 )
+rect_clip_content = false
+focus_mode = 2
+mouse_filter = 0
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 1
+size_flags_vertical = 1
+toggle_mode = false
+enabled_focus_mode = 2
+shortcut = null
+group = null
+texture_normal = ExtResource( 6 )
+texture_pressed = ExtResource( 7 )
+_sections_unfolded = [ "Rect" ]
+
+[connection signal="pressed" from="menu_play" to="." method="_on_menu_play_pressed"]
+
+

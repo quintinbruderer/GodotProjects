@@ -215,7 +215,7 @@ func _on_best_score_changed():
 "
 _sections_unfolded = [ "Resource" ]
 
-[sub_resource type="GDScript" id=13]
+[sub_resource type="GDScript" id=8]
 
 resource_name = "score_sparkle"
 script/source = "extends Sprite
@@ -226,14 +226,12 @@ script/source = "extends Sprite
 const medal_radius = 22
 
 func _ready():
-	var current_score = utils.get_main_node().find_node('current')
-	if current_score:
-		current_score.connect('current_score_count_finished',get_child(0),'play',['sparkle'])
+	game.connect('best_score_changed', get_child(0),'play',['sparkle'])
 	pass
 "
 _sections_unfolded = [ "Resource" ]
 
-[sub_resource type="Animation" id=14]
+[sub_resource type="Animation" id=9]
 
 resource_name = "sparkle"
 length = 1.0
@@ -407,7 +405,7 @@ tracks/3/keys = {
 } ]
 }
 
-[sub_resource type="GDScript" id=8]
+[sub_resource type="GDScript" id=13]
 
 script/source = "extends TextureButton
 
@@ -435,7 +433,7 @@ func _on_play_pressed():
 "
 _sections_unfolded = [ "Resource" ]
 
-[sub_resource type="Animation" id=9]
+[sub_resource type="Animation" id=14]
 
 length = 1.5
 loop = false
@@ -512,7 +510,7 @@ tracks/5/keys = {
 "values": [  ]
 }
 
-[node name="world" type="Node" index="0"]
+[node name="world" type="Node"]
 
 [node name="background" parent="." index="0" instance=ExtResource( 1 )]
 
@@ -750,7 +748,6 @@ _sections_unfolded = [ "Mouse", "Visibility" ]
 
 [node name="cntr_GameOver" type="Container" parent="canvas_HUD" index="2"]
 
-editor/display_folded = true
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
@@ -814,7 +811,6 @@ _sections_unfolded = [ "custom_colors", "custom_constants", "custom_fonts", "cus
 
 [node name="best" type="Label" parent="canvas_HUD/cntr_GameOver/gameover_scoreboard" index="1"]
 
-editor/display_folded = true
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
@@ -844,13 +840,12 @@ _sections_unfolded = [ "custom_colors", "custom_constants", "custom_fonts", "cus
 
 [node name="score_particle" type="Sprite" parent="canvas_HUD/cntr_GameOver/gameover_scoreboard/best" index="0"]
 
-editor/display_folded = true
 modulate = Color( 0.666667, 0.764706, 1, 1 )
 position = Vector2( 30.6225, -2.88335 )
 rotation = 0.936194
 scale = Vector2( 1e-05, 1e-05 )
 texture = ExtResource( 13 )
-script = SubResource( 13 )
+script = SubResource( 8 )
 _sections_unfolded = [ "Visibility" ]
 
 [node name="sparkle" type="AnimationPlayer" parent="canvas_HUD/cntr_GameOver/gameover_scoreboard/best/score_particle" index="0"]
@@ -860,7 +855,7 @@ autoplay = ""
 playback_process_mode = 1
 playback_default_blend_time = 0.0
 playback_speed = 1.0
-anims/sparkle = SubResource( 14 )
+anims/sparkle = SubResource( 9 )
 blend_times = [  ]
 _sections_unfolded = [ "Playback Options" ]
 
@@ -935,7 +930,7 @@ shortcut = null
 group = null
 texture_normal = ExtResource( 16 )
 texture_pressed = ExtResource( 17 )
-script = SubResource( 8 )
+script = SubResource( 13 )
 _sections_unfolded = [ "Rect", "Textures" ]
 
 [node name="game_over_animation" type="AnimationPlayer" parent="canvas_HUD/cntr_GameOver" index="3"]
@@ -945,7 +940,7 @@ autoplay = ""
 playback_process_mode = 1
 playback_default_blend_time = 0.0
 playback_speed = 1.0
-anims/show = SubResource( 9 )
+anims/show = SubResource( 14 )
 blend_times = [  ]
 
 [connection signal="tween_completed" from="canvas_HUD/button_instructions/tween_effect" to="canvas_HUD/button_instructions" method="_on_tween_effect_tween_completed"]
