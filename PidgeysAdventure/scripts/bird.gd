@@ -26,6 +26,11 @@ func _process(delta):
 func _input(event):
 	state.input(event)
 	pass
+
+func _unhandled_input(event):
+	if state.has_method("unhandled_input"):
+		state.unhandled_input(event)
+	pass
 	
 func _on_bird_rigid_body_entered(other_body):
 	collider_body = other_body
@@ -113,9 +118,14 @@ class FlappingState:
 	
 	func input(event):
 		if event is InputEventScreenTouch and event.pressed:
-#			print(event)
 			flap()
 		pass
+	
+	func unhandled_input(event):
+		#Though redundent looking, protects from quick tap lag
+		if event is InputEventScreenTouch and event.pressed:
+			flap()
+		pass	
 		
 	func on_body_enter(other_body):
 		bird.get_node('bird_anim_player').stop()

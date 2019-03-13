@@ -5,6 +5,7 @@ extends CanvasLayer
 # var b = "textvar"
 var fader 
 const stage_game = "res://stages/FlappyBird.tscn"
+const stage_menu = "res://stages/main_menu.tscn"
 signal reset_game
 
 func _ready():
