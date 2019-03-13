@@ -66,7 +66,6 @@ const center = preload(\"res://sprites/score/score-center.png\")
 const end = preload(\"res://sprites/score/score-outro.png\")
 
 func _ready():
-	show()
 	var bird = utils.get_main_node().get_node('pidgey')
 	if bird:
 		bird.connect('state_changed', self, '_on_bird_state_changed')
@@ -510,7 +509,7 @@ tracks/5/keys = {
 "values": [  ]
 }
 
-[node name="world" type="Node"]
+[node name="world" type="Node" index="0"]
 
 [node name="background" parent="." index="0" instance=ExtResource( 1 )]
 
