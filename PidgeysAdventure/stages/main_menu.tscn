@@ -145,7 +145,7 @@ tracks/3/keys = {
 "values": [ Vector2( -20, 360 ), Vector2( 308, 360 ) ]
 }
 
-[node name="main_menu" type="CanvasLayer"]
+[node name="main_menu" type="CanvasLayer" index="0"]
 
 layer = 1
 offset = Vector2( 0, 0 )
@@ -222,7 +222,6 @@ _sections_unfolded = [ "Playback Options" ]
 
 [node name="pidgey2dNode" type="Node2D" parent="." index="2"]
 
-editor/display_folded = true
 position = Vector2( -20, 360 )
 rotation = -0.563867
 _sections_unfolded = [ "Transform" ]

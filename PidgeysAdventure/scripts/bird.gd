@@ -16,6 +16,7 @@ const grounded_num = 3
 
 func _ready():
 	set_process_input(true)
+
 	add_to_group(game.GROUP_BIRD)
 	pass
 
@@ -140,6 +141,7 @@ class FlappingState:
 		bird.set_linear_velocity(Vector2(bird.get_linear_velocity().x,-flap_height))
 		bird.set_angular_velocity(-8)
 		bird.get_node('bird_anim_player').play('flap')
+		audio_player.get_node('sounds').get_node('flap').play()
 		pass	
 		
 	func exit():

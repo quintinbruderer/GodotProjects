@@ -1,7 +1,8 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://audio/ogg/title.ogg" type="AudioStream" id=1]
 [ext_resource path="res://scripts/music.gd" type="Script" id=2]
+[ext_resource path="res://scripts/sounds.gd" type="Script" id=3]
 
 [sub_resource type="Animation" id=1]
 
@@ -63,13 +64,8 @@ anims/fade_in = SubResource( 1 )
 anims/fade_out = SubResource( 2 )
 blend_times = [  ]
 
-[node name="sounds" type="AudioStreamPlayer" parent="." index="1"]
+[node name="sounds" type="Node" parent="." index="1"]
 
-stream = null
-volume_db = 0.0
-pitch_scale = 1.0
-autoplay = false
-mix_target = 2
-bus = "Master"
+script = ExtResource( 3 )
 
 

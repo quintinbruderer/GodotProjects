@@ -11,5 +11,5 @@ dest_files=[ "res://.import/pidgey.ogg-2cfdc1f43f1b72b9ed9c9a407a86158c.oggstr" 
 
 [params]
 
-loop=true
+loop=false
 loop_offset=0
