@@ -2,12 +2,12 @@
 
 importer="wav"
 type="AudioStreamSample"
-path="res://.import/winner.wav-8e25153b71d3c74a062079573bef4d88.sample"
+path="res://.import/endscore.wav-a6a6e2a07c4d7eabd2734cb1a1ab4fb4.sample"
 
 [deps]
 
-source_file="res://audio/mpeg/winner.wav"
-dest_files=[ "res://.import/winner.wav-8e25153b71d3c74a062079573bef4d88.sample" ]
+source_file="res://audio/wav/endscore.wav"
+dest_files=[ "res://.import/endscore.wav-a6a6e2a07c4d7eabd2734cb1a1ab4fb4.sample" ]
 
 [params]
 

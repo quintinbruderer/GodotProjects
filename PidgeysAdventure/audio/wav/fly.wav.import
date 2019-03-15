@@ -2,12 +2,12 @@
 
 importer="wav"
 type="AudioStreamSample"
-path="res://.import/endscore.wav-710a4fde92a4a95a48c9be36e4c5ab27.sample"
+path="res://.import/fly.wav-9c674b9302de41270926a2d1c794a64b.sample"
 
 [deps]
 
-source_file="res://audio/mpeg/endscore.wav"
-dest_files=[ "res://.import/endscore.wav-710a4fde92a4a95a48c9be36e4c5ab27.sample" ]
+source_file="res://audio/wav/fly.wav"
+dest_files=[ "res://.import/fly.wav-9c674b9302de41270926a2d1c794a64b.sample" ]
 
 [params]
 

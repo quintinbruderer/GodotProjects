@@ -621,7 +621,7 @@ tracks/5/keys = {
 "values": [  ]
 }
 
-[node name="world" type="Node" index="0"]
+[node name="world" type="Node"]
 
 [node name="background" parent="." index="0" instance=ExtResource( 1 )]
 
