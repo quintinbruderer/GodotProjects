@@ -3,8 +3,10 @@ extends CanvasLayer
 # class member variables go here, for example:
 # var a = 2
 # var b = "textvar"
+var music_player
 
 func _ready():
+	music_player = audio_player.get_node('music')
 	# Called when the node is added to the scene for the first time.
 	# Initialization here
 	pass
@@ -17,5 +19,6 @@ func _ready():
 
 func _on_menu_play_pressed():
 	get_node("menu_play").set_disabled(true)
+	music_player.music_transition(music_player.game_music[0])
 	stage_manager.reset_stage(stage_manager.stage_game)
 	pass # replace with function body

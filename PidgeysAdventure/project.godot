@@ -11,14 +11,15 @@ config_version=3
 [application]
 
 config/name="Pidgey'sAdventures"
-run/main_scene="res://stages/FlappyBird.tscn"
+run/main_scene="res://stages/main_menu.tscn"
 config/icon="res://icon.png"
 
 [autoload]
 
+utils="*res://scripts/utils.gd"
 stage_manager="*res://stages/stage_manager.tscn"
 game="*res://scripts/game.gd"
-utils="*res://scripts/utils.gd"
+audio_player="*res://stages/audio_player.tscn"
 
 [display]
 

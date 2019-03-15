@@ -22,7 +22,6 @@ _sections_unfolded = [ "Scroll" ]
 [node name="bg" type="ParallaxLayer" parent="." index="0"]
 
 editor/display_folded = true
-visible = false
 motion_scale = Vector2( 1, 1 )
 motion_offset = Vector2( 0, 0 )
 motion_mirroring = Vector2( 288, 0 )

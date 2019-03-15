@@ -109,9 +109,11 @@ script/source = "extends TextureButton
 # class member variables go here, for example:
 # var a = 2
 # var b = \"textvar\"
+var music_player
 
 func _ready():
 	hide()
+	music_player = audio_player.get_node('music')
 	connect('pressed',self,'_on_pressed')
 #func _process(delta):
 #	# Called every frame. Delta is time since last frame.
@@ -120,8 +122,8 @@ func _ready():
 
 
 func _on_pressed():
-	print('pressed')
 	get_tree().set_pause(false)
+	music_player.music_transition(music_player.main_menu)
 	stage_manager.reset_stage(stage_manager.stage_menu)
 #	self.set_disabled(true)
 #	
@@ -667,6 +669,7 @@ _sections_unfolded = [ "Linear", "Transform" ]
 
 [node name="canvas_HUD" type="CanvasLayer" parent="." index="5"]
 
+editor/display_folded = true
 layer = 1
 offset = Vector2( 0, 0 )
 rotation = 0.0
