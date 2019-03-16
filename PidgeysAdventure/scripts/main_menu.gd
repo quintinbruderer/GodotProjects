@@ -20,7 +20,7 @@ func _ready():
 
 
 func _on_menu_play_pressed():
-	get_node("menu_play").set_disabled(true)
+#	get_node("menu_play").set_disabled(true)
 	sound_cry.play()
 	music_player.music_transition(music_player.game_music[0])
 	stage_manager.reset_stage(stage_manager.stage_game)
