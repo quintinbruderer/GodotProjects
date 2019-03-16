@@ -1,8 +1,9 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://sprites/background-d.png" type="Texture" id=1]
-[ext_resource path="res://sprites/buildings-d.png" type="Texture" id=2]
-[ext_resource path="res://sprites/trees-d.png" type="Texture" id=3]
+[ext_resource path="res://sprites/background-d-clouds.png" type="Texture" id=2]
+[ext_resource path="res://sprites/buildings-d.png" type="Texture" id=3]
+[ext_resource path="res://sprites/trees-d.png" type="Texture" id=4]
 
 [node name="background" type="ParallaxBackground" index="0"]
 
@@ -21,7 +22,6 @@ _sections_unfolded = [ "Scroll" ]
 
 [node name="bg" type="ParallaxLayer" parent="." index="0"]
 
-editor/display_folded = true
 motion_scale = Vector2( 1, 1 )
 motion_offset = Vector2( 0, 0 )
 motion_mirroring = Vector2( 288, 0 )
@@ -43,7 +43,7 @@ _sections_unfolded = [ "Motion" ]
 
 [node name="background_sprite" type="Sprite" parent="tempcloudlayer" index="0"]
 
-texture = ExtResource( 1 )
+texture = ExtResource( 2 )
 centered = false
 region_rect = Rect2( 77, 20, 1, 1 )
 _sections_unfolded = [ "Animation", "Offset" ]
@@ -58,7 +58,7 @@ _sections_unfolded = [ "Motion" ]
 [node name="buildings-d" type="Sprite" parent="buildings" index="0"]
 
 position = Vector2( 0, 274 )
-texture = ExtResource( 2 )
+texture = ExtResource( 3 )
 offset = Vector2( 180, 0 )
 _sections_unfolded = [ "Offset", "Transform" ]
 
@@ -72,7 +72,7 @@ _sections_unfolded = [ "Motion" ]
 [node name="treesprite" type="Sprite" parent="trees" index="0"]
 
 position = Vector2( 0, 349 )
-texture = ExtResource( 3 )
+texture = ExtResource( 4 )
 offset = Vector2( 168, 0 )
 _sections_unfolded = [ "Offset", "Transform" ]
 

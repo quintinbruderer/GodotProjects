@@ -3,7 +3,7 @@ extends RigidBody2D
 onready var state = StartingState.new(self)
 signal state_changed
 
-const forward_speed = 140
+const forward_speed = 150
 const flap_height = 250
 var collider_body
 
@@ -16,11 +16,12 @@ const grounded_num = 3
 
 func _ready():
 	set_process_input(true)
-
+	set_process_unhandled_input(true)
+	set_physics_process(true)
 	add_to_group(game.GROUP_BIRD)
 	pass
 
-func _process(delta):
+func _physics_process(delta):
 	state.update(delta)
 	pass
 	
@@ -156,6 +157,7 @@ class HitState:
 		self.bird = bird
 		bird.set_linear_velocity(Vector2(forward_speed/20,0))
 		bird.add_collision_exception_with(bird.collider_body)
+		audio_player.get_node('sounds').get_node('bump').play()
 		pass
 	
 	func update(delta):
@@ -179,7 +181,7 @@ class GroundedState:
 	
 	func _init(bird):
 		self.bird = bird
-		
+		audio_player.get_node('sounds').get_node('smack').play()
 		pass
 	
 	func update(delta):

@@ -1,4 +1,4 @@
-[gd_scene load_steps=39 format=2]
+[gd_scene load_steps=42 format=2]
 
 [ext_resource path="res://scenes/background.tscn" type="PackedScene" id=1]
 [ext_resource path="res://scripts/cameraScript.gd" type="Script" id=2]
@@ -7,21 +7,24 @@
 [ext_resource path="res://scenes/bird.tscn" type="PackedScene" id=5]
 [ext_resource path="res://sprites/play.png" type="Texture" id=6]
 [ext_resource path="res://sprites/pause.png" type="Texture" id=7]
-[ext_resource path="res://sprites/menu.png" type="Texture" id=8]
-[ext_resource path="res://sprites/instructions.png" type="Texture" id=9]
-[ext_resource path="res://sprites/get_ready.png" type="Texture" id=10]
-[ext_resource path="res://sprites/score/score-intro.png" type="Texture" id=11]
-[ext_resource path="res://fonts/pkmnrs.ttf" type="DynamicFontData" id=12]
-[ext_resource path="res://sprites/score/score-center.png" type="Texture" id=13]
-[ext_resource path="res://sprites/score/score-outro.png" type="Texture" id=14]
-[ext_resource path="res://sprites/gameover/scoreboard.png" type="Texture" id=15]
-[ext_resource path="res://sprites/gameover/particle.png" type="Texture" id=16]
-[ext_resource path="res://sprites/gameover/medals.png" type="Texture" id=17]
-[ext_resource path="res://sprites/gameover/gameover.png" type="Texture" id=18]
-[ext_resource path="res://sprites/gameover/start-button-B.png" type="Texture" id=19]
-[ext_resource path="res://sprites/gameover/start-button-A.png" type="Texture" id=20]
+[ext_resource path="res://sprites/menu_buttons/menu.png" type="Texture" id=8]
+[ext_resource path="res://sprites/menu_buttons/menu-pressed.png" type="Texture" id=9]
+[ext_resource path="res://sprites/tap-pressed.png" type="Texture" id=10]
+[ext_resource path="res://sprites/tap.png" type="Texture" id=11]
+[ext_resource path="res://sprites/get_ready.png" type="Texture" id=12]
+[ext_resource path="res://sprites/score/score-intro.png" type="Texture" id=13]
+[ext_resource path="res://fonts/pkmnrs.ttf" type="DynamicFontData" id=14]
+[ext_resource path="res://sprites/score/score-center.png" type="Texture" id=15]
+[ext_resource path="res://sprites/score/score-outro.png" type="Texture" id=16]
+[ext_resource path="res://sprites/menu_buttons/scoreboard.png" type="Texture" id=17]
+[ext_resource path="res://sprites/menu_buttons/particle.png" type="Texture" id=18]
+[ext_resource path="res://sprites/menu_buttons/medals.png" type="Texture" id=19]
+[ext_resource path="res://sprites/menu_buttons/gameover.png" type="Texture" id=20]
+[ext_resource path="res://sprites/menu_buttons/start-button-B.png" type="Texture" id=21]
+[ext_resource path="res://sprites/menu_buttons/start-button-A.png" type="Texture" id=22]
 
-[sub_resource type="GDScript" id=15]
+
+[sub_resource type="GDScript" id=1]
 
 resource_name = "pause_menu"
 script/source = "extends Container
@@ -49,7 +52,7 @@ func _on_bird_state_changed(bird):
 	pass"
 _sections_unfolded = [ "Resource" ]
 
-[sub_resource type="GDScript" id=17]
+[sub_resource type="GDScript" id=2]
 
 resource_name = "btn_resume"
 script/source = "extends TextureButton
@@ -57,6 +60,7 @@ script/source = "extends TextureButton
 # class member variables go here, for example:
 # var a = 2
 # var b = \"textvar\"
+onready var sound_click = audio_player.get_node('sounds').get_node('click')
 
 func _ready():
 	hide()
@@ -68,15 +72,16 @@ func _ready():
 #	# Update game logic here.
 #	pass
 func _on_pressed():
+	sound_click.play()
 	get_tree().set_pause(false)
 	hide()
 	get_parent().find_node('tint').hide()
-	vget_parent().find_node('menu').hide()
+	get_parent().find_node('menu').hide()
 	get_parent().find_node('pause').show()
 	"
 _sections_unfolded = [ "Resource" ]
 
-[sub_resource type="GDScript" id=16]
+[sub_resource type="GDScript" id=3]
 
 resource_name = "btn_pause"
 script/source = "extends TextureButton
@@ -84,6 +89,7 @@ script/source = "extends TextureButton
 # class member variables go here, for example:
 # var a = 2
 # var b = \"textvar\"
+onready var sound_click = audio_player.get_node('sounds').get_node('click')
 
 func _ready():
 	connect('pressed',self,'_on_pressed')
@@ -94,6 +100,7 @@ func _ready():
 #	# Update game logic here.
 #	pass
 func _on_pressed():
+	sound_click.play()
 	get_tree().set_pause(true)
 	hide()
 	get_parent().find_node('tint').show()
@@ -101,7 +108,7 @@ func _on_pressed():
 	get_parent().find_node('menu').show()"
 _sections_unfolded = [ "Resource" ]
 
-[sub_resource type="GDScript" id=18]
+[sub_resource type="GDScript" id=4]
 
 resource_name = "btn_pauseMenu"
 script/source = "extends TextureButton
@@ -109,11 +116,11 @@ script/source = "extends TextureButton
 # class member variables go here, for example:
 # var a = 2
 # var b = \"textvar\"
-var music_player
+onready var music_player = audio_player.get_node('music')
+onready var sound_exit = audio_player.get_node('sounds').get_node('exit')
 
 func _ready():
 	hide()
-	music_player = audio_player.get_node('music')
 	connect('pressed',self,'_on_pressed')
 #func _process(delta):
 #	# Called every frame. Delta is time since last frame.
@@ -122,6 +129,7 @@ func _ready():
 
 
 func _on_pressed():
+	sound_exit.play()
 	get_tree().set_pause(false)
 	music_player.music_transition(music_player.main_menu)
 	stage_manager.reset_stage(stage_manager.stage_menu)
@@ -131,12 +139,13 @@ func _on_pressed():
 "
 _sections_unfolded = [ "Resource" ]
 
-[sub_resource type="GDScript" id=1]
+[sub_resource type="GDScript" id=5]
 
-resource_name = "button_instructions"
 script/source = "#(built in) button instructions
 
 extends TextureButton
+
+var sound_click
 
 onready var button_tap = utils.get_main_node().get_node('canvas_HUD/button_instructions/tap')
 onready var button_get_ready = utils.get_main_node().get_node('canvas_HUD/button_instructions/get_ready')
@@ -145,6 +154,8 @@ onready var bird = utils.get_main_node().get_node('pidgey')
 
 func _ready():
 	show()
+	button_tap.play()
+	sound_click = audio_player.get_node('sounds').get_node('click')
 	button_get_ready.hide()
 	
 	tween_effect.interpolate_property(self,'modulate', 
@@ -153,7 +164,9 @@ func _ready():
 	pass
 
 func _on_pressed():
+	self.set_disabled(true)
 	button_tap.hide()
+	sound_click.play()
 	button_get_ready.show()
 	tween_effect.start()	
 	pass
@@ -170,9 +183,17 @@ func _on_tween_effect_tween_completed(object, key):
 "
 _sections_unfolded = [ "Resource" ]
 
-[sub_resource type="GDScript" id=2]
+[sub_resource type="SpriteFrames" id=6]
 
-resource_name = "score_board"
+animations = [ {
+"frames": [ ExtResource( 10 ), ExtResource( 11 ) ],
+"loop": true,
+"name": "default",
+"speed": 4.0
+} ]
+
+[sub_resource type="GDScript" id=7]
+
 script/source = "extends HBoxContainer
 
 const center = preload(\"res://sprites/score/score-center.png\")
@@ -221,22 +242,23 @@ func __set_score(score_num):
 	pass"
 _sections_unfolded = [ "Resource" ]
 
-[sub_resource type="DynamicFont" id=3]
+[sub_resource type="DynamicFont" id=8]
 
 size = 25
 use_mipmaps = false
 use_filter = false
-font_data = ExtResource( 12 )
+font_data = ExtResource( 14 )
 _sections_unfolded = [ "Extra Spacing", "Font", "Settings" ]
 
-[sub_resource type="GDScript" id=4]
+[sub_resource type="GDScript" id=9]
 
-resource_name = "game_over"
 script/source = "extends Container
 
+var sound_endscore
 
 func _ready():
 	hide()
+	sound_endscore = audio_player.get_node('sounds').get_node('endscore')
 	var bird = utils.get_main_node().get_node('pidgey')
 	if bird:
 		bird.connect('state_changed', self, '_on_bird_state_changed')
@@ -246,7 +268,10 @@ func _ready():
 func _on_bird_state_changed(bird):
 	if bird.get_state() == bird.grounded_num:
 		get_node('game_over_animation').play('show')
+	pass
 	
+func _animation_sound_handler():
+	sound_endscore.play()
 	pass
 #func _process(delta):
 #	# Called every frame. Delta is time since last frame.
@@ -255,29 +280,28 @@ func _on_bird_state_changed(bird):
 "
 _sections_unfolded = [ "Resource" ]
 
-[sub_resource type="DynamicFont" id=5]
+[sub_resource type="DynamicFont" id=10]
 
 size = 25
 use_mipmaps = false
 use_filter = false
-font_data = ExtResource( 12 )
+font_data = ExtResource( 14 )
 _sections_unfolded = [ "Extra Spacing", "Font", "Settings" ]
 
-[sub_resource type="GDScript" id=6]
+[sub_resource type="GDScript" id=11]
 
-resource_name = "game_over_current"
 script/source = "extends Label
 
 signal current_score_count_finished
 
 func _ready():
 	set_process(true)
+
 	pass
 
 func count_to_score():
 	var lerp_time = 0
 	var lerp_duration = .5
-	
 	while lerp_time < lerp_duration:
 		lerp_time += get_process_delta_time()
 		lerp_time = min(lerp_time,lerp_duration)
@@ -293,17 +317,20 @@ func _on_game_over_animation_animation_finished(anim_name):
 "
 _sections_unfolded = [ "Resource" ]
 
-[sub_resource type="GDScript" id=7]
+[sub_resource type="GDScript" id=12]
 
-resource_name = "game_over_best"
 script/source = "extends Label
 
 # class member variables go here, for example:
 # var a = 2
 # var b = \"textvar\"
+var sound_medal
+var sound_new_best
 
 func _ready():
 	game.connect('best_score_changed', self, '_on_best_score_changed')
+	sound_medal =  audio_player.get_node('sounds').get_node('medal')
+	sound_new_best =  audio_player.get_node('sounds').get_node('new_best')
 	set_text(str(game.best_score))
 	pass
 
@@ -323,13 +350,15 @@ func _on_best_score_changed():
 		var percent = lerp_time/lerp_duration
 		set_text(str(int(lerp(game.old_best_score,game.best_score,percent))))
 		yield(get_tree(), 'idle_frame')
+	yield(sound_medal,'finished')
+	sound_new_best.play()
+	
 	pass # replace with function body
 "
 _sections_unfolded = [ "Resource" ]
 
-[sub_resource type="GDScript" id=8]
+[sub_resource type="GDScript" id=13]
 
-resource_name = "score_sparkle"
 script/source = "extends Sprite
 
 # class member variables go here, for example:
@@ -343,9 +372,8 @@ func _ready():
 "
 _sections_unfolded = [ "Resource" ]
 
-[sub_resource type="Animation" id=9]
+[sub_resource type="Animation" id=14]
 
-resource_name = "sparkle"
 length = 1.0
 loop = true
 step = 0.1
@@ -400,17 +428,20 @@ tracks/3/keys = {
 } ]
 }
 
-[sub_resource type="GDScript" id=10]
+[sub_resource type="GDScript" id=15]
 
-resource_name = "medals"
 script/source = "extends Sprite
 
 # class member variables go here, for example:
 # var a = 2
 # var b = \"textvar\"
 
+var sound_medal
+
+
 func _ready():
 	hide()
+	sound_medal = audio_player.get_node('sounds').get_node('medal')
 	var current_score = get_parent().find_node('current')
 	if current_score:
 		current_score.connect('current_score_count_finished',self,'show_medal')
@@ -427,12 +458,12 @@ func show_medal():
 		else:
 			set_frame(3)
 		show()
+		sound_medal.play()
 	pass"
 _sections_unfolded = [ "Resource" ]
 
-[sub_resource type="GDScript" id=11]
+[sub_resource type="GDScript" id=16]
 
-resource_name = "medal_sparkle"
 script/source = "extends Sprite
 
 # class member variables go here, for example:
@@ -460,9 +491,8 @@ func _random_position():
 	set_position(Vector2(randx,randy))"
 _sections_unfolded = [ "Resource" ]
 
-[sub_resource type="Animation" id=12]
+[sub_resource type="Animation" id=17]
 
-resource_name = "sparkle"
 length = 0.6
 loop = true
 step = 0.1
@@ -517,17 +547,18 @@ tracks/3/keys = {
 } ]
 }
 
-[sub_resource type="GDScript" id=13]
+[sub_resource type="GDScript" id=18]
 
-resource_name = "gameOver_play"
 script/source = "extends TextureButton
 
 # class member variables go here, for example:
 # var a = 2
 # var b = \"textvar\"
+var sound_click
 
 func _ready():
 	hide()
+	sound_click = audio_player.get_node('sounds').get_node('click')
 	var game_over_scoreboard = utils.get_main_node().find_node(\"gameover_scoreboard\")
 	if game_over_scoreboard:
 		game_over_scoreboard.get_child(0).connect('current_score_count_finished', self, 'show')
@@ -541,12 +572,13 @@ func _ready():
 
 func _on_play_pressed():
 	self.set_disabled(true)
+	sound_click.play()
 	stage_manager.reset_stage(stage_manager.stage_game)
 	pass # replace with function body
 "
 _sections_unfolded = [ "Resource" ]
 
-[sub_resource type="Animation" id=14]
+[sub_resource type="Animation" id=19]
 
 length = 1.5
 loop = false
@@ -606,24 +638,27 @@ tracks/4/loop_wrap = true
 tracks/4/imported = false
 tracks/4/enabled = true
 tracks/4/keys = {
-"times": PoolRealArray( 0, 0.4, 1.2 ),
+"times": PoolRealArray( 0, 0.4, 1.3 ),
 "transitions": PoolRealArray( 0.15, 0.15, 1 ),
 "update": 0,
-"values": [ Vector2( 30, 510 ), Vector2( 30, 510 ), Vector2( 30, 172 ) ]
+"values": [ Vector2( 30, 510 ), Vector2( 30, 510 ), Vector2( 30, 170 ) ]
 }
 tracks/5/type = "method"
-tracks/5/path = NodePath("gameover_scoreboard/current")
+tracks/5/path = NodePath(".")
 tracks/5/interp = 1
 tracks/5/loop_wrap = true
 tracks/5/imported = false
 tracks/5/enabled = true
 tracks/5/keys = {
-"times": PoolRealArray(  ),
-"transitions": PoolRealArray(  ),
-"values": [  ]
+"times": PoolRealArray( 0.7 ),
+"transitions": PoolRealArray( 1 ),
+"values": [ {
+"args": [  ],
+"method": "_animation_sound_handler"
+} ]
 }
 
-[node name="world" type="Node"]
+[node name="world" type="Node" index="0"]
 
 [node name="background" parent="." index="0" instance=ExtResource( 1 )]
 
@@ -669,7 +704,6 @@ _sections_unfolded = [ "Linear", "Transform" ]
 
 [node name="canvas_HUD" type="CanvasLayer" parent="." index="5"]
 
-editor/display_folded = true
 layer = 1
 offset = Vector2( 0, 0 )
 rotation = 0.0
@@ -691,7 +725,7 @@ mouse_filter = 0
 mouse_default_cursor_shape = 0
 size_flags_horizontal = 1
 size_flags_vertical = 1
-script = SubResource( 15 )
+script = SubResource( 1 )
 _sections_unfolded = [ "Pause", "Rect" ]
 
 [node name="tint" type="ColorRect" parent="canvas_HUD/cntr_pause" index="0"]
@@ -735,7 +769,7 @@ enabled_focus_mode = 2
 shortcut = null
 group = null
 texture_normal = ExtResource( 6 )
-script = SubResource( 17 )
+script = SubResource( 2 )
 _sections_unfolded = [ "Textures" ]
 
 [node name="pause" type="TextureButton" parent="canvas_HUD/cntr_pause" index="2"]
@@ -760,7 +794,7 @@ enabled_focus_mode = 2
 shortcut = null
 group = null
 texture_normal = ExtResource( 7 )
-script = SubResource( 16 )
+script = SubResource( 3 )
 _sections_unfolded = [ "Rect", "Textures" ]
 
 [node name="menu" type="TextureButton" parent="canvas_HUD/cntr_pause" index="3"]
@@ -785,12 +819,12 @@ enabled_focus_mode = 2
 shortcut = null
 group = null
 texture_normal = ExtResource( 8 )
-script = SubResource( 18 )
+texture_pressed = ExtResource( 9 )
+script = SubResource( 4 )
 _sections_unfolded = [ "Margin", "Rect", "Textures" ]
 
 [node name="button_instructions" type="TextureButton" parent="canvas_HUD" index="1"]
 
-editor/display_folded = true
 visible = false
 anchor_left = 0.0
 anchor_top = 0.0
@@ -810,28 +844,18 @@ action_mode = 0
 enabled_focus_mode = 2
 shortcut = null
 group = null
-script = SubResource( 1 )
+script = SubResource( 5 )
 _sections_unfolded = [ "Size Flags", "Visibility" ]
 
-[node name="tap" type="TextureRect" parent="canvas_HUD/button_instructions" index="0"]
+[node name="tap" type="AnimatedSprite" parent="canvas_HUD/button_instructions" index="0"]
 
 show_behind_parent = true
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
-margin_left = 87.0
-margin_top = 226.0
-margin_right = 201.0
-margin_bottom = 324.0
-rect_pivot_offset = Vector2( 0, 0 )
-rect_clip_content = false
-mouse_filter = 1
-mouse_default_cursor_shape = 0
-size_flags_horizontal = 1
-size_flags_vertical = 1
-texture = ExtResource( 9 )
-stretch_mode = 0
+position = Vector2( 87, 200 )
+frames = SubResource( 6 )
+animation = "default"
+centered = false
+offset = Vector2( 0, 4 )
+_sections_unfolded = [ "Transform" ]
 
 [node name="get_ready" type="TextureRect" parent="canvas_HUD/button_instructions" index="1"]
 
@@ -849,7 +873,7 @@ mouse_filter = 1
 mouse_default_cursor_shape = 0
 size_flags_horizontal = 1
 size_flags_vertical = 1
-texture = ExtResource( 10 )
+texture = ExtResource( 12 )
 expand = true
 stretch_mode = 0
 _sections_unfolded = [ "Rect", "Visibility" ]
@@ -865,6 +889,7 @@ playback/speed = 1.0
 
 [node name="scoreboard" type="HBoxContainer" parent="canvas_HUD" index="2"]
 
+editor/display_folded = true
 visible = false
 anchor_left = 0.0
 anchor_top = 0.0
@@ -882,7 +907,7 @@ size_flags_horizontal = 1
 size_flags_vertical = 1
 custom_constants/separation = 0
 alignment = 1
-script = SubResource( 2 )
+script = SubResource( 7 )
 _sections_unfolded = [ "Margin", "Mouse", "custom_constants" ]
 
 [node name="score" type="TextureRect" parent="canvas_HUD/scoreboard" index="0"]
@@ -900,7 +925,7 @@ mouse_filter = 2
 mouse_default_cursor_shape = 0
 size_flags_horizontal = 1
 size_flags_vertical = 1
-texture = ExtResource( 11 )
+texture = ExtResource( 13 )
 stretch_mode = 0
 _sections_unfolded = [ "Anchor", "Offset", "Rect", "Transform" ]
 
@@ -920,7 +945,7 @@ mouse_filter = 2
 mouse_default_cursor_shape = 0
 size_flags_horizontal = 1
 size_flags_vertical = 4
-custom_fonts/font = SubResource( 3 )
+custom_fonts/font = SubResource( 8 )
 custom_colors/font_color = Color( 0, 0, 0, 1 )
 custom_constants/shadow_as_outline = 0
 text = "0"
@@ -947,7 +972,7 @@ mouse_filter = 2
 mouse_default_cursor_shape = 0
 size_flags_horizontal = 1
 size_flags_vertical = 1
-texture = ExtResource( 13 )
+texture = ExtResource( 15 )
 stretch_mode = 0
 _sections_unfolded = [ "Mouse", "Visibility" ]
 
@@ -967,7 +992,7 @@ mouse_filter = 2
 mouse_default_cursor_shape = 0
 size_flags_horizontal = 1
 size_flags_vertical = 1
-texture = ExtResource( 14 )
+texture = ExtResource( 16 )
 stretch_mode = 0
 _sections_unfolded = [ "Mouse", "Visibility" ]
 
@@ -984,7 +1009,7 @@ mouse_filter = 0
 mouse_default_cursor_shape = 0
 size_flags_horizontal = 1
 size_flags_vertical = 1
-script = SubResource( 4 )
+script = SubResource( 9 )
 _sections_unfolded = [ "Visibility" ]
 
 [node name="gameover_scoreboard" type="TextureRect" parent="canvas_HUD/cntr_GameOver" index="0"]
@@ -994,16 +1019,16 @@ anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_left = 30.0
-margin_top = 172.0
+margin_top = 176.756
 margin_right = 256.0
-margin_bottom = 286.0
+margin_bottom = 290.756
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
 mouse_filter = 1
 mouse_default_cursor_shape = 0
 size_flags_horizontal = 1
 size_flags_vertical = 1
-texture = ExtResource( 15 )
+texture = ExtResource( 17 )
 stretch_mode = 0
 _sections_unfolded = [ "Rect" ]
 
@@ -1023,7 +1048,7 @@ mouse_filter = 2
 mouse_default_cursor_shape = 0
 size_flags_horizontal = 1
 size_flags_vertical = 4
-custom_fonts/font = SubResource( 5 )
+custom_fonts/font = SubResource( 10 )
 custom_colors/font_color = Color( 0, 0, 0, 1 )
 custom_colors/font_color_shadow = Color( 0, 0, 0, 0.392157 )
 text = "0"
@@ -1032,11 +1057,12 @@ valign = 1
 percent_visible = 1.0
 lines_skipped = 0
 max_lines_visible = -1
-script = SubResource( 6 )
+script = SubResource( 11 )
 _sections_unfolded = [ "custom_colors", "custom_constants", "custom_fonts", "custom_styles" ]
 
 [node name="best" type="Label" parent="canvas_HUD/cntr_GameOver/gameover_scoreboard" index="1"]
 
+editor/display_folded = true
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
@@ -1051,7 +1077,7 @@ mouse_filter = 2
 mouse_default_cursor_shape = 0
 size_flags_horizontal = 1
 size_flags_vertical = 4
-custom_fonts/font = SubResource( 5 )
+custom_fonts/font = SubResource( 10 )
 custom_colors/font_color = Color( 1, 0.8, 0.4, 1 )
 custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
 custom_constants/shadow_as_outline = 1
@@ -1061,7 +1087,7 @@ valign = 1
 percent_visible = 1.0
 lines_skipped = 0
 max_lines_visible = -1
-script = SubResource( 7 )
+script = SubResource( 12 )
 _sections_unfolded = [ "custom_colors", "custom_constants", "custom_fonts", "custom_styles" ]
 
 [node name="score_particle" type="Sprite" parent="canvas_HUD/cntr_GameOver/gameover_scoreboard/best" index="0"]
@@ -1070,8 +1096,8 @@ modulate = Color( 0.666667, 0.764706, 1, 1 )
 position = Vector2( 30.6225, -2.88335 )
 rotation = 0.936194
 scale = Vector2( 1e-05, 1e-05 )
-texture = ExtResource( 16 )
-script = SubResource( 8 )
+texture = ExtResource( 18 )
+script = SubResource( 13 )
 _sections_unfolded = [ "Visibility" ]
 
 [node name="sparkle" type="AnimationPlayer" parent="canvas_HUD/cntr_GameOver/gameover_scoreboard/best/score_particle" index="0"]
@@ -1081,7 +1107,7 @@ autoplay = ""
 playback_process_mode = 1
 playback_default_blend_time = 0.0
 playback_speed = 1.0
-anims/sparkle = SubResource( 9 )
+anims/sparkle = SubResource( 14 )
 blend_times = [  ]
 _sections_unfolded = [ "Playback Options" ]
 
@@ -1089,9 +1115,9 @@ _sections_unfolded = [ "Playback Options" ]
 
 editor/display_folded = true
 position = Vector2( 48, 65 )
-texture = ExtResource( 17 )
+texture = ExtResource( 19 )
 vframes = 4
-script = SubResource( 10 )
+script = SubResource( 15 )
 _sections_unfolded = [ "Animation", "Visibility" ]
 
 [node name="medal_particle" type="Sprite" parent="canvas_HUD/cntr_GameOver/gameover_scoreboard/medals" index="0"]
@@ -1099,8 +1125,8 @@ _sections_unfolded = [ "Animation", "Visibility" ]
 modulate = Color( 1, 0.683333, 0.688863, 1 )
 rotation = -1.13446
 scale = Vector2( 1e-05, 1e-05 )
-texture = ExtResource( 16 )
-script = SubResource( 11 )
+texture = ExtResource( 18 )
+script = SubResource( 16 )
 _sections_unfolded = [ "Transform", "Visibility" ]
 
 [node name="sparkle" type="AnimationPlayer" parent="canvas_HUD/cntr_GameOver/gameover_scoreboard/medals/medal_particle" index="0"]
@@ -1110,7 +1136,7 @@ autoplay = ""
 playback_process_mode = 1
 playback_default_blend_time = 0.0
 playback_speed = 1.0
-anims/sparkle = SubResource( 12 )
+anims/sparkle = SubResource( 17 )
 blend_times = [  ]
 
 [node name="gameover" type="TextureRect" parent="canvas_HUD/cntr_GameOver" index="1"]
@@ -1129,7 +1155,7 @@ mouse_filter = 1
 mouse_default_cursor_shape = 0
 size_flags_horizontal = 1
 size_flags_vertical = 1
-texture = ExtResource( 18 )
+texture = ExtResource( 20 )
 stretch_mode = 0
 _sections_unfolded = [ "Rect", "Visibility" ]
 
@@ -1154,9 +1180,9 @@ toggle_mode = false
 enabled_focus_mode = 2
 shortcut = null
 group = null
-texture_normal = ExtResource( 19 )
-texture_pressed = ExtResource( 20 )
-script = SubResource( 13 )
+texture_normal = ExtResource( 21 )
+texture_pressed = ExtResource( 22 )
+script = SubResource( 18 )
 _sections_unfolded = [ "Rect", "Textures" ]
 
 [node name="game_over_animation" type="AnimationPlayer" parent="canvas_HUD/cntr_GameOver" index="3"]
@@ -1166,7 +1192,7 @@ autoplay = ""
 playback_process_mode = 1
 playback_default_blend_time = 0.0
 playback_speed = 1.0
-anims/show = SubResource( 14 )
+anims/show = SubResource( 19 )
 blend_times = [  ]
 
 [connection signal="tween_completed" from="canvas_HUD/button_instructions/tween_effect" to="canvas_HUD/button_instructions" method="_on_tween_effect_tween_completed"]

@@ -12,7 +12,7 @@ dest_files=[ "res://.import/gameEnter.wav-7177ce095508d3e98a76e1549e07d39a.sampl
 [params]
 
 force/8_bit=false
-force/mono=false
+force/mono=true
 force/max_rate=false
 force/max_rate_hz=44100
 edit/trim=true

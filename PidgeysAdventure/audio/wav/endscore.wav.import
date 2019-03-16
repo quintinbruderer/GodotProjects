@@ -12,7 +12,7 @@ dest_files=[ "res://.import/endscore.wav-a6a6e2a07c4d7eabd2734cb1a1ab4fb4.sample
 [params]
 
 force/8_bit=false
-force/mono=false
+force/mono=true
 force/max_rate=false
 force/max_rate_hz=44100
 edit/trim=true

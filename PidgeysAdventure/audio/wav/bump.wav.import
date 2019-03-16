@@ -12,7 +12,7 @@ dest_files=[ "res://.import/bump.wav-6bc2afa7837128a6cc8f138fb6b7bec9.sample" ]
 [params]
 
 force/8_bit=false
-force/mono=false
+force/mono=true
 force/max_rate=false
 force/max_rate_hz=44100
 edit/trim=true

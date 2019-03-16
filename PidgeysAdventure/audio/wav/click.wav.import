@@ -12,7 +12,7 @@ dest_files=[ "res://.import/click.wav-ed85d37b746e2bb778848d8a2dc0327c.sample" ]
 [params]
 
 force/8_bit=false
-force/mono=false
+force/mono=true
 force/max_rate=false
 force/max_rate_hz=44100
 edit/trim=true
