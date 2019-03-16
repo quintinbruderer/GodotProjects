@@ -1,4 +1,4 @@
-[gd_scene load_steps=42 format=2]
+[gd_scene load_steps=44 format=2]
 
 [ext_resource path="res://scenes/background.tscn" type="PackedScene" id=1]
 [ext_resource path="res://scripts/cameraScript.gd" type="Script" id=2]
@@ -20,9 +20,8 @@
 [ext_resource path="res://sprites/menu_buttons/particle.png" type="Texture" id=18]
 [ext_resource path="res://sprites/menu_buttons/medals.png" type="Texture" id=19]
 [ext_resource path="res://sprites/menu_buttons/gameover.png" type="Texture" id=20]
-[ext_resource path="res://sprites/menu_buttons/start-button-B.png" type="Texture" id=21]
-[ext_resource path="res://sprites/menu_buttons/start-button-A.png" type="Texture" id=22]
-
+[ext_resource path="res://sprites/menu_buttons/play.png" type="Texture" id=21]
+[ext_resource path="res://sprites/menu_buttons/play-pressed.png" type="Texture" id=22]
 
 [sub_resource type="GDScript" id=1]
 
@@ -113,9 +112,6 @@ _sections_unfolded = [ "Resource" ]
 resource_name = "btn_pauseMenu"
 script/source = "extends TextureButton
 
-# class member variables go here, for example:
-# var a = 2
-# var b = \"textvar\"
 onready var music_player = audio_player.get_node('music')
 onready var sound_exit = audio_player.get_node('sounds').get_node('exit')
 
@@ -129,13 +125,13 @@ func _ready():
 
 
 func _on_pressed():
+	self.set_disabled(true)
 	sound_exit.play()
 	get_tree().set_pause(false)
 	music_player.music_transition(music_player.main_menu)
 	stage_manager.reset_stage(stage_manager.stage_menu)
-#	self.set_disabled(true)
-#	
-	pass # replace with function body
+	
+	pass 
 "
 _sections_unfolded = [ "Resource" ]
 
@@ -252,6 +248,7 @@ _sections_unfolded = [ "Extra Spacing", "Font", "Settings" ]
 
 [sub_resource type="GDScript" id=9]
 
+resource_name = "game_over"
 script/source = "extends Container
 
 var sound_endscore
@@ -547,18 +544,17 @@ tracks/3/keys = {
 } ]
 }
 
-[sub_resource type="GDScript" id=18]
+[sub_resource type="GDScript" id=20]
 
-script/source = "extends TextureButton
+resource_name = "game_over_buttons"
+script/source = "extends HBoxContainer
 
 # class member variables go here, for example:
 # var a = 2
 # var b = \"textvar\"
-var sound_click
 
 func _ready():
 	hide()
-	sound_click = audio_player.get_node('sounds').get_node('click')
 	var game_over_scoreboard = utils.get_main_node().find_node(\"gameover_scoreboard\")
 	if game_over_scoreboard:
 		game_over_scoreboard.get_child(0).connect('current_score_count_finished', self, 'show')
@@ -568,6 +564,18 @@ func _ready():
 #	# Called every frame. Delta is time since last frame.
 #	# Update game logic here.
 #	pass
+"
+_sections_unfolded = [ "Resource" ]
+
+[sub_resource type="GDScript" id=18]
+
+resource_name = "game_over_play"
+script/source = "extends TextureButton
+
+# class member variables go here, for example:
+# var a = 2
+# var b = \"textvar\"
+onready var sound_click = audio_player.get_node('sounds').get_node('click')
 
 
 func _on_play_pressed():
@@ -575,6 +583,25 @@ func _on_play_pressed():
 	sound_click.play()
 	stage_manager.reset_stage(stage_manager.stage_game)
 	pass # replace with function body
+"
+_sections_unfolded = [ "Resource" ]
+
+[sub_resource type="GDScript" id=21]
+
+resource_name = "game_over_menu"
+script/source = "extends TextureButton
+
+onready var music_player = audio_player.get_node('music')
+onready var sound_exit = audio_player.get_node('sounds').get_node('exit')
+
+func _on_menu_pressed():
+	self.set_disabled(true)
+	sound_exit.play()
+	get_tree().set_pause(false)
+	music_player.music_transition(music_player.main_menu)
+	stage_manager.reset_stage(stage_manager.stage_menu)
+	
+	pass 
 "
 _sections_unfolded = [ "Resource" ]
 
@@ -713,6 +740,7 @@ transform = Transform2D( 1, 0, 0, 1, 0, 0 )
 [node name="cntr_pause" type="Container" parent="canvas_HUD" index="0"]
 
 pause_mode = 2
+visible = false
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
@@ -825,6 +853,7 @@ _sections_unfolded = [ "Margin", "Rect", "Textures" ]
 
 [node name="button_instructions" type="TextureButton" parent="canvas_HUD" index="1"]
 
+editor/display_folded = true
 visible = false
 anchor_left = 0.0
 anchor_top = 0.0
@@ -998,7 +1027,6 @@ _sections_unfolded = [ "Mouse", "Visibility" ]
 
 [node name="cntr_GameOver" type="Container" parent="canvas_HUD" index="3"]
 
-visible = false
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
@@ -1014,14 +1042,15 @@ _sections_unfolded = [ "Visibility" ]
 
 [node name="gameover_scoreboard" type="TextureRect" parent="canvas_HUD/cntr_GameOver" index="0"]
 
+editor/display_folded = true
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_left = 30.0
-margin_top = 176.756
+margin_top = 176.0
 margin_right = 256.0
-margin_bottom = 290.756
+margin_bottom = 290.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
 mouse_filter = 1
@@ -1159,16 +1188,34 @@ texture = ExtResource( 20 )
 stretch_mode = 0
 _sections_unfolded = [ "Rect", "Visibility" ]
 
-[node name="play" type="TextureButton" parent="canvas_HUD/cntr_GameOver" index="2"]
+[node name="HBoxContainer" type="HBoxContainer" parent="canvas_HUD/cntr_GameOver" index="2"]
 
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_left = 92.0
+margin_left = 30.0
 margin_top = 300.0
-margin_right = 196.0
-margin_bottom = 358.0
+margin_right = 256.0
+margin_bottom = 360.0
+rect_pivot_offset = Vector2( 0, 0 )
+rect_clip_content = false
+mouse_filter = 1
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 1
+size_flags_vertical = 1
+alignment = 0
+script = SubResource( 20 )
+_sections_unfolded = [ "Rect" ]
+
+[node name="play" type="TextureButton" parent="canvas_HUD/cntr_GameOver/HBoxContainer" index="0"]
+
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_right = 109.0
+margin_bottom = 60.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
 focus_mode = 2
@@ -1185,6 +1232,31 @@ texture_pressed = ExtResource( 22 )
 script = SubResource( 18 )
 _sections_unfolded = [ "Rect", "Textures" ]
 
+[node name="menu" type="TextureButton" parent="canvas_HUD/cntr_GameOver/HBoxContainer" index="1"]
+
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 113.0
+margin_right = 222.0
+margin_bottom = 60.0
+rect_pivot_offset = Vector2( 0, 0 )
+rect_clip_content = false
+focus_mode = 2
+mouse_filter = 0
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 1
+size_flags_vertical = 1
+toggle_mode = false
+enabled_focus_mode = 2
+shortcut = null
+group = null
+texture_normal = ExtResource( 8 )
+texture_pressed = ExtResource( 9 )
+script = SubResource( 21 )
+_sections_unfolded = [ "Textures" ]
+
 [node name="game_over_animation" type="AnimationPlayer" parent="canvas_HUD/cntr_GameOver" index="3"]
 
 root_node = NodePath("..")
@@ -1195,9 +1267,23 @@ playback_speed = 1.0
 anims/show = SubResource( 19 )
 blend_times = [  ]
 
+[node name="TouchScreenButton" type="TouchScreenButton" parent="canvas_HUD" index="4"]
+
+normal = ExtResource( 8 )
+pressed = ExtResource( 9 )
+bitmask = null
+shape = null
+shape_centered = true
+shape_visible = true
+passby_press = false
+action = ""
+visibility_mode = 0
+
 [connection signal="tween_completed" from="canvas_HUD/button_instructions/tween_effect" to="canvas_HUD/button_instructions" method="_on_tween_effect_tween_completed"]
 
-[connection signal="pressed" from="canvas_HUD/cntr_GameOver/play" to="canvas_HUD/cntr_GameOver/play" method="_on_play_pressed"]
+[connection signal="pressed" from="canvas_HUD/cntr_GameOver/HBoxContainer/play" to="canvas_HUD/cntr_GameOver/HBoxContainer/play" method="_on_play_pressed"]
+
+[connection signal="pressed" from="canvas_HUD/cntr_GameOver/HBoxContainer/menu" to="canvas_HUD/cntr_GameOver/HBoxContainer/menu" method="_on_menu_pressed"]
 
 [connection signal="animation_finished" from="canvas_HUD/cntr_GameOver/game_over_animation" to="canvas_HUD/cntr_GameOver/gameover_scoreboard/current" method="_on_game_over_animation_animation_finished"]
 
