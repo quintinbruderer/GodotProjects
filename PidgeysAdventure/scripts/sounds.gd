@@ -15,6 +15,7 @@ func _ready():
 		#true skip navigational and hiddel
 		var file = dir.get_next()
 		while file != '':
+			print(file)
 			if file.ends_with('wav'): #protects from random files
 				sound_effects.append(file)
 			file = dir.get_next()

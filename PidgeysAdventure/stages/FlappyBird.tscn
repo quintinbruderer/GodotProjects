@@ -142,6 +142,7 @@ extents = Vector2( 144, 256 )
 
 [sub_resource type="GDScript" id=6]
 
+resource_name = "button_instructions"
 script/source = "#(built in) button instructions
 
 extends TouchScreenButton
@@ -157,7 +158,6 @@ func _ready():
 	show()
 	button_tap.play()
 	button_get_ready.hide()
-	bird.set_new_state(bird.flap_num)
 	pass
 
 
@@ -165,9 +165,10 @@ func _on_button_instructions_pressed():
 	button_tap.hide()
 	sound_click.play()
 	bird.set_new_state(bird.flap_num)
-	hide()
+	
 #	button_get_ready.show()
 # 	animation shtuff
+	hide()
 	pass # replace with function body
 "
 _sections_unfolded = [ "Resource" ]
