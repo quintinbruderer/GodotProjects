@@ -7,8 +7,8 @@ extends Node2D
 const pipe_scene = preload('res://scenes/pipes.tscn')
 const avg_pipe_thickness = 62 #124/2
 const ground_height = 100
-const pipe_x_offset = 140
-const pipe_y_offset = 120
+const pipe_x_offset = 120
+const pipe_y_offset = 100
 var viewport_size
 
 func _ready():

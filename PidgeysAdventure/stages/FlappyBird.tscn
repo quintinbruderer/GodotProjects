@@ -480,6 +480,7 @@ _sections_unfolded = [ "Resource" ]
 
 [sub_resource type="GDScript" id=17]
 
+resource_name = "medal_sparkle"
 script/source = "extends Sprite
 
 # class member variables go here, for example:
@@ -703,7 +704,7 @@ tracks/5/keys = {
 } ]
 }
 
-[node name="world" type="Node" index="0"]
+[node name="world" type="Node"]
 
 [node name="background" parent="." index="0" instance=ExtResource( 1 )]
 
@@ -743,12 +744,14 @@ script = ExtResource( 2 )
 
 [node name="pidgey" parent="." index="4" instance=ExtResource( 5 )]
 
+editor/display_folded = true
 position = Vector2( 72, 140 )
 linear_damp = 0.0
 _sections_unfolded = [ "Linear", "Transform" ]
 
 [node name="canvas_HUD" type="CanvasLayer" parent="." index="5"]
 
+editor/display_folded = true
 layer = 1
 offset = Vector2( 0, 0 )
 rotation = 0.0
@@ -994,7 +997,6 @@ _sections_unfolded = [ "Mouse", "Visibility" ]
 
 [node name="cntr_GameOver" type="Container" parent="canvas_HUD" index="3"]
 
-editor/display_folded = true
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
@@ -1010,14 +1012,15 @@ _sections_unfolded = [ "Visibility" ]
 
 [node name="gameover_scoreboard" type="TextureRect" parent="canvas_HUD/cntr_GameOver" index="0"]
 
+editor/display_folded = true
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_left = 30.0
-margin_top = 176.0
+margin_top = 170.0
 margin_right = 256.0
-margin_bottom = 290.0
+margin_bottom = 284.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
 mouse_filter = 1
@@ -1156,6 +1159,7 @@ _sections_unfolded = [ "Rect", "Visibility" ]
 
 [node name="Node2D" type="Node2D" parent="canvas_HUD/cntr_GameOver" index="2"]
 
+editor/display_folded = true
 position = Vector2( 30, 300 )
 script = SubResource( 19 )
 _sections_unfolded = [ "Rect", "Transform" ]
