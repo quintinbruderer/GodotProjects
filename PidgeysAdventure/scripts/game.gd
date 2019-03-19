@@ -9,7 +9,7 @@ var best_score = 0 setget _set_best_score
 var current_score = 0	setget _set_current_score
 
 var shiny = false
-var day = false
+var day = true
 
 const bronze_score = 1
 const silver_score = 2
@@ -21,6 +21,9 @@ signal current_score_changed
 #signal current_score_two_digit
 
 func _ready():
+	var time = OS.get_time()
+	if time.hour < 6 or time.hour > 18:
+		day = false
 	_shiny_chance()
 	set_process_input(true)
 	stage_manager.connect('reset_game', self, '_on_game_reset')
@@ -40,13 +43,15 @@ func _set_current_score(new_val):
 
 func _on_game_reset():
 	current_score = 0
-	_shiny_chance()
-	#day_and_shiny()
+	day_and_shiny()
 	
 func day_and_shiny():
 	randomize()
 	_day_shifter()
 	_shiny_chance()
+
+func day_shifter():
+	pass
 	
 func _shiny_chance():
 	randomize()

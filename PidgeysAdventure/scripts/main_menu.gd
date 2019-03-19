@@ -22,6 +22,9 @@ func _ready():
 func _on_menu_play_pressed():
 #	get_node("menu_play").set_disabled(true)
 	sfx.play('cry')
-	music_player.music_transition(music_player.game_music[2])
+	if game.day:
+		music_player.music_transition(music_player.game_music[0])
+	else:
+		music_player.music_transition(music_player.game_music[1])
 	stage_manager.reset_stage(stage_manager.stage_game)
 	pass # replace with function body

@@ -1,11 +1,79 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://sprites/background-d.png" type="Texture" id=1]
 [ext_resource path="res://sprites/background-d-clouds.png" type="Texture" id=2]
 [ext_resource path="res://sprites/buildings-d.png" type="Texture" id=3]
 [ext_resource path="res://sprites/trees-d.png" type="Texture" id=4]
 
-[node name="background" type="ParallaxBackground" index="0"]
+[sub_resource type="GDScript" id=1]
+
+resource_name = "day_night_bg"
+script/source = "extends Node2D
+
+onready var sprite = get_node('background_sprite')
+onready var day = sprite.get_texture()
+onready var night = load(\"res://sprites/background-n.png\")
+func _ready():
+	if game.day == false:
+		sprite.set_texture(night)
+	else:
+		sprite.set_texture(day)
+	pass
+"
+_sections_unfolded = [ "Resource" ]
+
+[sub_resource type="GDScript" id=2]
+
+resource_name = "day_night_clouds"
+script/source = "extends ParallaxLayer
+
+onready var sprite = get_node('clouds_sprite')
+onready var day = sprite.get_texture()
+onready var night = load(\"res://sprites/background-n-clouds.png\")
+func _ready():
+	if game.day == false:
+		sprite.set_texture(night)
+	else:
+		sprite.set_texture(day)
+	pass
+"
+_sections_unfolded = [ "Resource" ]
+
+[sub_resource type="GDScript" id=3]
+
+resource_name = "day_night_buildings"
+script/source = "extends ParallaxLayer
+
+onready var sprite = get_node('buildings_sprite')
+onready var day = sprite.get_texture()
+onready var night = load(\"res://sprites/buildings-n.png\")
+func _ready():
+	if game.day == false:
+		sprite.set_texture(night)
+	else:
+		sprite.set_texture(day)
+	pass
+"
+_sections_unfolded = [ "Resource" ]
+
+[sub_resource type="GDScript" id=4]
+
+resource_name = "day_night_trees"
+script/source = "extends ParallaxLayer
+
+onready var sprite = get_node('trees_sprite')
+onready var day = sprite.get_texture()
+onready var night = load(\"res://sprites/trees-n.png\")
+func _ready():
+	if game.day == false:
+		sprite.set_texture(night)
+	else:
+		sprite.set_texture(day)
+	pass
+"
+_sections_unfolded = [ "Resource" ]
+
+[node name="background" type="ParallaxBackground"]
 
 layer = -1
 offset = Vector2( 0, 0 )
@@ -20,11 +88,9 @@ scroll_limit_end = Vector2( 0, 0 )
 scroll_ignore_camera_zoom = false
 _sections_unfolded = [ "Scroll" ]
 
-[node name="bg" type="ParallaxLayer" parent="." index="0"]
+[node name="bg" type="Node2D" parent="." index="0"]
 
-motion_scale = Vector2( 1, 1 )
-motion_offset = Vector2( 0, 0 )
-motion_mirroring = Vector2( 288, 0 )
+script = SubResource( 1 )
 _sections_unfolded = [ "Motion" ]
 
 [node name="background_sprite" type="Sprite" parent="bg" index="0"]
@@ -34,14 +100,15 @@ centered = false
 region_rect = Rect2( 77, 20, 1, 1 )
 _sections_unfolded = [ "Animation", "Offset", "Transform" ]
 
-[node name="tempcloudlayer" type="ParallaxLayer" parent="." index="1"]
+[node name="clouds" type="ParallaxLayer" parent="." index="1"]
 
 motion_scale = Vector2( 0.15, 1 )
 motion_offset = Vector2( 0, 0 )
 motion_mirroring = Vector2( 288, 0 )
+script = SubResource( 2 )
 _sections_unfolded = [ "Motion" ]
 
-[node name="background_sprite" type="Sprite" parent="tempcloudlayer" index="0"]
+[node name="clouds_sprite" type="Sprite" parent="clouds" index="0"]
 
 texture = ExtResource( 2 )
 centered = false
@@ -53,9 +120,10 @@ _sections_unfolded = [ "Animation", "Offset" ]
 motion_scale = Vector2( 0.3, 1 )
 motion_offset = Vector2( 0, 0 )
 motion_mirroring = Vector2( 288, 0 )
+script = SubResource( 3 )
 _sections_unfolded = [ "Motion" ]
 
-[node name="buildings-d" type="Sprite" parent="buildings" index="0"]
+[node name="buildings_sprite" type="Sprite" parent="buildings" index="0"]
 
 position = Vector2( 0, 274 )
 texture = ExtResource( 3 )
@@ -67,9 +135,10 @@ _sections_unfolded = [ "Offset", "Transform" ]
 motion_scale = Vector2( 0.6, 1 )
 motion_offset = Vector2( 0, 0 )
 motion_mirroring = Vector2( 288, 0 )
+script = SubResource( 4 )
 _sections_unfolded = [ "Motion" ]
 
-[node name="treesprite" type="Sprite" parent="trees" index="0"]
+[node name="trees_sprite" type="Sprite" parent="trees" index="0"]
 
 position = Vector2( 0, 349 )
 texture = ExtResource( 4 )

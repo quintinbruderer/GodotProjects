@@ -1,11 +1,17 @@
 extends StaticBody2D
 
-onready var cam_pos
+onready var cam_pos = utils.get_main_node().get_node('camera')
+onready var sprite = get_node('ground_sprite')
+onready var day = sprite.get_texture()
+onready var night = load("res://sprites/ground-n.png")
 
 signal destroyed_ground
 
 func _ready():
-	cam_pos = utils.get_main_node().get_node('camera')
+	if game.day == false:
+		sprite.set_texture(night)
+	else:
+		sprite.set_texture(day)
 	set_process(true)
 	add_to_group(game.GROUP_GROUNDS)
 	pass
@@ -20,3 +26,5 @@ func _process(delta):
 		pass
 	#print(cam_pos.position.x,cam_pos.get_position().x)
 	pass
+
+

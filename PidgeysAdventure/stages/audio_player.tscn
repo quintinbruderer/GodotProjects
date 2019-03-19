@@ -78,6 +78,7 @@ blend_times = [  ]
 
 [node name="sounds" type="Node" parent="." index="1"]
 
+editor/display_folded = true
 script = ExtResource( 3 )
 
 [node name="bump" type="AudioStreamPlayer" parent="sounds" index="0"]
