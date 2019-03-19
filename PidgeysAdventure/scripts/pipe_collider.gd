@@ -1,21 +1,11 @@
 extends Area2D
 
-var sounds
-
-func _ready():
-	sounds = audio_player.get_node('sounds')
-	pass
-
-#func _process(delta):
-#	# Called every frame. Delta is time since last frame.
-#	# Update game logic here.
-#	pass
-
+onready var sfx = audio_player.get_node('sounds')
 
 func _on_areacollider_body_entered(body):
 	if body.is_in_group(game.GROUP_BIRD):
 		game.current_score += 1
-		sounds.get_node('through').play()
+		sfx.play('through')
 		pass
 	
 	pass # replace with function body

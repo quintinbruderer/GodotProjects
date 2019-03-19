@@ -1,4 +1,4 @@
-[gd_scene load_steps=45 format=2]
+[gd_scene load_steps=46 format=2]
 
 [ext_resource path="res://scenes/background.tscn" type="PackedScene" id=1]
 [ext_resource path="res://scripts/cameraScript.gd" type="Script" id=2]
@@ -59,7 +59,7 @@ script/source = "extends TouchScreenButton
 # class member variables go here, for example:
 # var a = 2
 # var b = \"textvar\"
-onready var sound_click = audio_player.get_node('sounds').get_node('click')
+onready var sfx = audio_player.get_node('sounds')
 
 func _ready():
 	hide()
@@ -71,7 +71,7 @@ func _ready():
 #	# Update game logic here.
 #	pass
 func _on_pressed():
-	sound_click.play()
+	sfx.play('click')
 	get_tree().set_pause(false)
 	hide()
 	get_parent().find_node('tint').hide()
@@ -88,7 +88,7 @@ script/source = "extends TouchScreenButton
 # class member variables go here, for example:
 # var a = 2
 # var b = \"textvar\"
-onready var sound_click = audio_player.get_node('sounds').get_node('click')
+onready var sfx = audio_player.get_node('sounds')
 
 func _ready():
 	connect('pressed',self,'_on_pressed')
@@ -99,7 +99,7 @@ func _ready():
 #	# Update game logic here.
 #	pass
 func _on_pressed():
-	sound_click.play()
+	sfx.play('click')
 	get_tree().set_pause(true)
 	hide()
 	get_parent().find_node('tint').show()
@@ -113,7 +113,7 @@ resource_name = "btn_pauseMenu"
 script/source = "extends TouchScreenButton
 
 onready var music_player = audio_player.get_node('music')
-onready var sound_exit = audio_player.get_node('sounds').get_node('exit')
+onready var sfx = audio_player.get_node('sounds')
 
 func _ready():
 	hide()
@@ -126,7 +126,7 @@ func _ready():
 
 func _on_pressed():
 #	self.set_disabled(true)
-	sound_exit.play()
+	sfx.play('exit')
 	get_tree().set_pause(false)
 	music_player.music_transition(music_player.main_menu)
 	stage_manager.reset_stage(stage_manager.stage_menu)
@@ -147,27 +147,28 @@ script/source = "#(built in) button instructions
 
 extends TouchScreenButton
 
-onready var sound_click = audio_player.get_node('sounds').get_node('click')
+onready var sfx = audio_player.get_node('sounds')
 
-onready var button_tap = utils.get_main_node().get_node('canvas_HUD/button_instructions/tap')
-onready var button_get_ready = utils.get_main_node().get_node('canvas_HUD/button_instructions/get_ready')
-onready var tween_effect = get_node('tween_effect')
+onready var anim = get_node('instruction_anim')
+onready var button_tap = get_node('tap')
+onready var button_get_ready = get_node('get_ready')
 onready var bird = utils.get_main_node().get_node('pidgey')
 
 func _ready():
 	show()
+	
 	button_tap.play()
-	button_get_ready.hide()
 	pass
 
 
 func _on_button_instructions_pressed():
-	button_tap.hide()
-	sound_click.play()
+	sfx.play('click')
+	anim.play('instructions')
+	pass # replace with function body
+
+
+func _on_instruction_anim_animation_finished(anim_name):
 	bird.set_new_state(bird.flap_num)
-	
-#	button_get_ready.show()
-# 	animation shtuff
 	hide()
 	pass # replace with function body
 "
@@ -182,8 +183,40 @@ animations = [ {
 "speed": 4.0
 } ]
 
+[sub_resource type="Animation" id=23]
+
+resource_name = "instructions"
+length = 1.5
+loop = false
+step = 0.1
+tracks/0/type = "value"
+tracks/0/path = NodePath("tap:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.4 ),
+"transitions": PoolRealArray( 4, 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 0 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("get_ready:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 0.3, 0.8, 1.5 ),
+"transitions": PoolRealArray( 4, 4, 4, 4 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 0 ), Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 0 ) ]
+}
+
 [sub_resource type="GDScript" id=8]
 
+resource_name = "scoreboard"
 script/source = "extends HBoxContainer
 
 const center = preload(\"res://sprites/score/score-center.png\")
@@ -242,13 +275,13 @@ _sections_unfolded = [ "Extra Spacing", "Font", "Settings" ]
 
 [sub_resource type="GDScript" id=10]
 
+resource_name = "gameover_container"
 script/source = "extends Container
 
-var sound_endscore
+onready var sfx = audio_player.get_node('sounds')
 
 func _ready():
 	hide()
-	sound_endscore = audio_player.get_node('sounds').get_node('endscore')
 	var bird = utils.get_main_node().get_node('pidgey')
 	if bird:
 		bird.connect('state_changed', self, '_on_bird_state_changed')
@@ -261,7 +294,7 @@ func _on_bird_state_changed(bird):
 	pass
 	
 func _animation_sound_handler():
-	sound_endscore.play()
+	sfx.play('endscore')
 	pass
 #func _process(delta):
 #	# Called every frame. Delta is time since last frame.
@@ -309,18 +342,16 @@ _sections_unfolded = [ "Resource" ]
 
 [sub_resource type="GDScript" id=13]
 
+resource_name = "gameover_best"
 script/source = "extends Label
 
 # class member variables go here, for example:
 # var a = 2
 # var b = \"textvar\"
-var sound_medal
-var sound_new_best
+onready var sfx = audio_player.get_node('sounds')
 
 func _ready():
 	game.connect('best_score_changed', self, '_on_best_score_changed')
-	sound_medal =  audio_player.get_node('sounds').get_node('medal')
-	sound_new_best =  audio_player.get_node('sounds').get_node('new_best')
 	set_text(str(game.best_score))
 	pass
 
@@ -340,8 +371,8 @@ func _on_best_score_changed():
 		var percent = lerp_time/lerp_duration
 		set_text(str(int(lerp(game.old_best_score,game.best_score,percent))))
 		yield(get_tree(), 'idle_frame')
-	yield(sound_medal,'finished')
-	sound_new_best.play()
+#	yield(sound_medal,'finished')
+	sfx.play('newBestDelayed')
 	
 	pass # replace with function body
 "
@@ -420,18 +451,13 @@ tracks/3/keys = {
 
 [sub_resource type="GDScript" id=16]
 
+resource_name = "gameover_medals"
 script/source = "extends Sprite
 
-# class member variables go here, for example:
-# var a = 2
-# var b = \"textvar\"
-
-var sound_medal
-
+onready var sfx = audio_player.get_node('sounds')
 
 func _ready():
 	hide()
-	sound_medal = audio_player.get_node('sounds').get_node('medal')
 	var current_score = get_parent().find_node('current')
 	if current_score:
 		current_score.connect('current_score_count_finished',self,'show_medal')
@@ -448,7 +474,7 @@ func show_medal():
 		else:
 			set_frame(3)
 		show()
-		sound_medal.play()
+		sfx.play('medal')
 	pass"
 _sections_unfolded = [ "Resource" ]
 
@@ -508,7 +534,7 @@ tracks/1/keys = {
 "times": PoolRealArray( 0, 0.2, 0.4 ),
 "transitions": PoolRealArray( 1, 1, 1 ),
 "update": 0,
-"values": [ Vector2( 1e-05, 1e-05 ), Vector2( 1, 1 ), Vector2( 1e-05, 1e-05 ) ]
+"values": [ Vector2( 1e-05, 1e-05 ), Vector2( 0.25, 0.25 ), Vector2( 1e-05, 1e-05 ) ]
 }
 tracks/2/type = "value"
 tracks/2/path = NodePath(".:modulate")
@@ -815,13 +841,15 @@ _sections_unfolded = [ "Rect", "Textures", "Transform" ]
 
 [node name="button_instructions" type="TouchScreenButton" parent="canvas_HUD" index="1"]
 
+editor/display_folded = true
+visible = false
 position = Vector2( 144, 256 )
 normal = null
 pressed = null
 bitmask = null
 shape = SubResource( 5 )
 shape_centered = true
-shape_visible = true
+shape_visible = false
 passby_press = false
 action = ""
 visibility_mode = 0
@@ -835,13 +863,25 @@ position = Vector2( 0, 20 )
 frames = SubResource( 7 )
 animation = "default"
 offset = Vector2( 0, 4 )
-_sections_unfolded = [ "Transform" ]
+_sections_unfolded = [ "Transform", "Visibility" ]
 
 [node name="get_ready" type="Sprite" parent="canvas_HUD/button_instructions" index="1"]
 
+modulate = Color( 1, 1, 1, 0 )
 position = Vector2( 0, -190 )
 texture = ExtResource( 12 )
 _sections_unfolded = [ "Transform", "Visibility" ]
+
+[node name="instruction_anim" type="AnimationPlayer" parent="canvas_HUD/button_instructions" index="2"]
+
+root_node = NodePath("..")
+autoplay = ""
+playback_process_mode = 1
+playback_default_blend_time = 0.0
+playback_speed = 1.0
+anims/instructions = SubResource( 23 )
+blend_times = [  ]
+_sections_unfolded = [ "Playback Options" ]
 
 [node name="scoreboard" type="HBoxContainer" parent="canvas_HUD" index="2"]
 
@@ -955,7 +995,6 @@ _sections_unfolded = [ "Mouse", "Visibility" ]
 [node name="cntr_GameOver" type="Container" parent="canvas_HUD" index="3"]
 
 editor/display_folded = true
-visible = false
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
@@ -971,7 +1010,6 @@ _sections_unfolded = [ "Visibility" ]
 
 [node name="gameover_scoreboard" type="TextureRect" parent="canvas_HUD/cntr_GameOver" index="0"]
 
-editor/display_folded = true
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
@@ -1071,7 +1109,6 @@ _sections_unfolded = [ "Playback Options" ]
 
 [node name="medals" type="Sprite" parent="canvas_HUD/cntr_GameOver/gameover_scoreboard" index="2"]
 
-editor/display_folded = true
 position = Vector2( 48, 65 )
 texture = ExtResource( 19 )
 vframes = 4
@@ -1117,14 +1154,13 @@ texture = ExtResource( 20 )
 stretch_mode = 0
 _sections_unfolded = [ "Rect", "Visibility" ]
 
-[node name="HBoxContainer" type="Node2D" parent="canvas_HUD/cntr_GameOver" index="2"]
+[node name="Node2D" type="Node2D" parent="canvas_HUD/cntr_GameOver" index="2"]
 
-editor/display_folded = true
 position = Vector2( 30, 300 )
 script = SubResource( 19 )
 _sections_unfolded = [ "Rect", "Transform" ]
 
-[node name="play" type="TouchScreenButton" parent="canvas_HUD/cntr_GameOver/HBoxContainer" index="0"]
+[node name="play" type="TouchScreenButton" parent="canvas_HUD/cntr_GameOver/Node2D" index="0"]
 
 normal = ExtResource( 21 )
 pressed = ExtResource( 22 )
@@ -1138,7 +1174,7 @@ visibility_mode = 0
 script = SubResource( 20 )
 _sections_unfolded = [ "Rect", "Textures" ]
 
-[node name="menu" type="TouchScreenButton" parent="canvas_HUD/cntr_GameOver/HBoxContainer" index="1"]
+[node name="menu" type="TouchScreenButton" parent="canvas_HUD/cntr_GameOver/Node2D" index="1"]
 
 position = Vector2( 120, 0 )
 normal = ExtResource( 8 )
@@ -1165,10 +1201,13 @@ blend_times = [  ]
 
 [connection signal="pressed" from="canvas_HUD/button_instructions" to="canvas_HUD/button_instructions" method="_on_button_instructions_pressed"]
 
-[connection signal="pressed" from="canvas_HUD/cntr_GameOver/HBoxContainer/play" to="canvas_HUD/cntr_GameOver/HBoxContainer/play" method="_on_play_pressed"]
+[connection signal="animation_finished" from="canvas_HUD/button_instructions/instruction_anim" to="canvas_HUD/button_instructions" method="_on_instruction_anim_animation_finished"]
 
-[connection signal="pressed" from="canvas_HUD/cntr_GameOver/HBoxContainer/menu" to="canvas_HUD/cntr_GameOver/HBoxContainer/menu" method="_on_menu_pressed"]
+[connection signal="pressed" from="canvas_HUD/cntr_GameOver/Node2D/play" to="canvas_HUD/cntr_GameOver/Node2D/play" method="_on_play_pressed"]
+
+[connection signal="pressed" from="canvas_HUD/cntr_GameOver/Node2D/menu" to="canvas_HUD/cntr_GameOver/Node2D/menu" method="_on_menu_pressed"]
 
 [connection signal="animation_finished" from="canvas_HUD/cntr_GameOver/game_over_animation" to="canvas_HUD/cntr_GameOver/gameover_scoreboard/current" method="_on_game_over_animation_animation_finished"]
 
 
+[editable path="pidgey"]

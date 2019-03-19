@@ -1,6 +1,12 @@
 extends RigidBody2D
 
 onready var state = StartingState.new(self)
+
+onready var sprite = get_node('bird_sheet')
+onready var normal = sprite.get_texture()
+onready var shiny = load("res://sprites/burd-gold.png")
+onready var shiny_animation = get_node('shiny_particle/sparkle')
+
 signal state_changed
 
 const forward_speed = 150
@@ -15,6 +21,10 @@ const grounded_num = 3
 #----
 
 func _ready():
+	if game.shiny == true:
+		sprite.set_texture(shiny)
+		shiny_animation.play('sparkle')
+		
 	set_process_input(true)
 	set_process_unhandled_input(true)
 	set_physics_process(true)
@@ -142,7 +152,7 @@ class FlappingState:
 		bird.set_linear_velocity(Vector2(bird.get_linear_velocity().x,-flap_height))
 		bird.set_angular_velocity(-8)
 		bird.get_node('bird_anim_player').play('flap')
-		audio_player.get_node('sounds').get_node('flap').play()
+		audio_player.get_node('sounds').play('flap')
 		pass	
 		
 	func exit():

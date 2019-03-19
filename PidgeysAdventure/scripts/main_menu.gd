@@ -4,11 +4,11 @@ extends CanvasLayer
 # var a = 2
 # var b = "textvar"
 var music_player
-var sound_cry
+var sfx
 
 func _ready():
 	music_player = audio_player.get_node('music')
-	sound_cry = audio_player.get_node('sounds').get_node('cry')
+	sfx = audio_player.get_node('sounds')
 	# Called when the node is added to the scene for the first time.
 	# Initialization here
 	pass
@@ -21,7 +21,7 @@ func _ready():
 
 func _on_menu_play_pressed():
 #	get_node("menu_play").set_disabled(true)
-	sound_cry.play()
-	music_player.music_transition(music_player.game_music[0])
+	sfx.play('cry')
+	music_player.music_transition(music_player.game_music[2])
 	stage_manager.reset_stage(stage_manager.stage_game)
 	pass # replace with function body

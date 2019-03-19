@@ -1,9 +1,10 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://scripts/bird.gd" type="Script" id=1]
 [ext_resource path="res://sprites/burd.png" type="Texture" id=2]
+[ext_resource path="res://sprites/menu_buttons/particle.png" type="Texture" id=3]
 
-[sub_resource type="Animation" id=1]
+[sub_resource type="Animation" id=19]
 
 resource_name = "flap"
 length = 0.6
@@ -22,7 +23,7 @@ tracks/0/keys = {
 "values": [ 0, 2, 2, 0 ]
 }
 
-[sub_resource type="Animation" id=2]
+[sub_resource type="Animation" id=20]
 
 resource_name = "flying"
 length = 1.5
@@ -53,7 +54,7 @@ tracks/1/keys = {
 "values": [ 0, 2, 2 ]
 }
 
-[sub_resource type="Animation" id=3]
+[sub_resource type="Animation" id=21]
 
 resource_name = "idle"
 length = 0.1
@@ -84,10 +85,95 @@ tracks/1/keys = {
 "values": [ 0 ]
 }
 
-[sub_resource type="CircleShape2D" id=4]
+[sub_resource type="CircleShape2D" id=22]
 
 custom_solver_bias = 0.0
 radius = 15.0
+
+[sub_resource type="GDScript" id=23]
+
+resource_name = "shiny"
+script/source = "extends Sprite
+
+# class member variables go here, for example:
+# var a = 2
+# var b = \"textvar\"
+const medal_radius = 10
+var randx
+var randy
+
+func _ready():
+	_random_position()
+	pass
+
+#func _process(delta):
+#	# Called every frame. Delta is time since last frame.
+#	# Update game logic here.
+#	pass
+
+
+func _random_position():
+	randomize()
+	randx = rand_range(-medal_radius,medal_radius)
+	randy = rand_range(-medal_radius,medal_radius)
+	set_position(Vector2(randx,randy))"
+_sections_unfolded = [ "Resource" ]
+
+[sub_resource type="Animation" id=24]
+
+length = 0.6
+loop = true
+step = 0.1
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:rotation_degrees")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.2, 0.4 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 0,
+"values": [ 65.0, 0.0, -65.0 ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath(".:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 0.2, 0.4 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 0,
+"values": [ Vector2( 1e-05, 1e-05 ), Vector2( 0.25, 0.25 ), Vector2( 1e-05, 1e-05 ) ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath(".:modulate")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0, 0.2, 0.4 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 0,
+"values": [ Color( 1, 0.683333, 0.688863, 1 ), Color( 1, 1, 1, 1 ), Color( 1, 0.683333, 0.688863, 1 ) ]
+}
+tracks/3/type = "method"
+tracks/3/path = NodePath(".")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/keys = {
+"times": PoolRealArray( 0.4 ),
+"transitions": PoolRealArray( 1 ),
+"values": [ {
+"args": [  ],
+"method": "_random_position"
+} ]
+}
 
 [node name="bird_rigid" type="RigidBody2D" index="0"]
 
@@ -129,15 +215,35 @@ autoplay = "idle"
 playback_process_mode = 1
 playback_default_blend_time = 0.0
 playback_speed = 3.0
-anims/flap = SubResource( 1 )
-anims/flying = SubResource( 2 )
-anims/idle = SubResource( 3 )
+anims/flap = SubResource( 19 )
+anims/flying = SubResource( 20 )
+anims/idle = SubResource( 21 )
 blend_times = [  ]
 _sections_unfolded = [ "Playback Options" ]
 
 [node name="bird_collider" type="CollisionShape2D" parent="." index="2"]
 
-shape = SubResource( 4 )
+shape = SubResource( 22 )
+
+[node name="shiny_particle" type="Sprite" parent="." index="3"]
+
+modulate = Color( 1, 0.722047, 0.726901, 1 )
+rotation = 0.995769
+scale = Vector2( 0.0305728, 0.0305728 )
+texture = ExtResource( 3 )
+script = SubResource( 23 )
+_sections_unfolded = [ "Transform", "Visibility" ]
+
+[node name="sparkle" type="AnimationPlayer" parent="shiny_particle" index="0"]
+
+root_node = NodePath("..")
+autoplay = ""
+playback_process_mode = 1
+playback_default_blend_time = 0.0
+playback_speed = 1.5
+anims/sparkle = SubResource( 24 )
+blend_times = [  ]
+_sections_unfolded = [ "Playback Options" ]
 
 [connection signal="body_entered" from="." to="." method="_on_bird_rigid_body_entered"]
 
