@@ -10,6 +10,7 @@ var current_score = 0	setget _set_current_score
 
 var shiny = false
 var day = true
+onready var music_player = audio_player.get_node('music')
 
 const bronze_score = 1
 const silver_score = 2
@@ -50,11 +51,17 @@ func day_and_shiny():
 	_day_shifter()
 	_shiny_chance()
 
-func day_shifter():
+func _day_shifter():
+	var chance = randi()%4 + 1
+	if chance == 1:
+		day = !day
+	if day == true and music_player.get_stream() != music_player.day:
+		music_player.music_transition(music_player.game_music[0])
+	elif day == false and music_player.get_stream() != music_player.night: 
+		music_player.music_transition(music_player.game_music[1])
 	pass
 	
 func _shiny_chance():
-	randomize()
 	var chance = randi()%10 + 1
 	if chance == 1:
 		shiny = true
