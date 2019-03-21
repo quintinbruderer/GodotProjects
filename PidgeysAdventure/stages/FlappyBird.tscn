@@ -162,6 +162,7 @@ func _ready():
 
 
 func _on_button_instructions_pressed():
+	self.set_block_signals(true)
 	sfx.play('click')
 	anim.play('instructions')
 	pass # replace with function body
@@ -753,6 +754,7 @@ transform = Transform2D( 1, 0, 0, 1, 0, 0 )
 [node name="cntr_pause" type="Container" parent="canvas_HUD" index="0"]
 
 pause_mode = 2
+editor/display_folded = true
 visible = false
 anchor_left = 0.0
 anchor_top = 0.0
@@ -835,8 +837,6 @@ _sections_unfolded = [ "Rect", "Textures", "Transform" ]
 
 [node name="button_instructions" type="TouchScreenButton" parent="canvas_HUD" index="1"]
 
-editor/display_folded = true
-visible = false
 position = Vector2( 144, 256 )
 normal = null
 pressed = null
@@ -988,6 +988,8 @@ _sections_unfolded = [ "Mouse", "Visibility" ]
 
 [node name="cntr_GameOver" type="Container" parent="canvas_HUD" index="3"]
 
+editor/display_folded = true
+visible = false
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
@@ -1204,4 +1206,3 @@ blend_times = [  ]
 [connection signal="animation_finished" from="canvas_HUD/cntr_GameOver/game_over_animation" to="canvas_HUD/cntr_GameOver/gameover_scoreboard/current" method="_on_game_over_animation_animation_finished"]
 
 
-[editable path="pidgey"]

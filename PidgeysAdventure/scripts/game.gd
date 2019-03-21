@@ -12,10 +12,10 @@ var shiny = false
 var day = true
 onready var music_player = audio_player.get_node('music')
 
-const bronze_score = 1
-const silver_score = 2
-const gold_score = 3
-const platinum_score = 4
+const bronze_score = 10
+const silver_score = 16
+const gold_score = 24
+const platinum_score = 35
 
 signal best_score_changed
 signal current_score_changed
