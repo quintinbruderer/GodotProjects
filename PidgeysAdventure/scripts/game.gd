@@ -25,7 +25,6 @@ func _ready():
 	var time = OS.get_time()
 	if time.hour < 6 or time.hour > 18:
 		day = false
-	_shiny_chance()
 	set_process_input(true)
 	stage_manager.connect('reset_game', self, '_on_game_reset')
 	pass
@@ -44,22 +43,7 @@ func _set_current_score(new_val):
 
 func _on_game_reset():
 	current_score = 0
-	day_and_shiny()
-	
-func day_and_shiny():
-	randomize()
-	_day_shifter()
 	_shiny_chance()
-
-func _day_shifter():
-	var chance = randi()%4 + 1
-	if chance == 1:
-		day = !day
-	if day == true and music_player.get_stream() != music_player.day:
-		music_player.music_transition(music_player.game_music[0])
-	elif day == false and music_player.get_stream() != music_player.night: 
-		music_player.music_transition(music_player.game_music[1])
-	pass
 	
 func _shiny_chance():
 	var chance = randi()%10 + 1
@@ -67,3 +51,12 @@ func _shiny_chance():
 		shiny = true
 	else:
 		shiny = false
+		
+func day_shifter():
+	var chance = randi()%4 + 1
+	if chance == 1:
+		day = !day	
+	if day == true and music_player.get_stream() != music_player.day:
+		music_player.music_transition(music_player.game_music[0])
+	elif day == false and music_player.get_stream() != music_player.night: 
+		music_player.music_transition(music_player.game_music[1])

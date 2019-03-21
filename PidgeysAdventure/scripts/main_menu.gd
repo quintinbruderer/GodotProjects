@@ -22,4 +22,5 @@ func _on_menu_play_pressed():
 #	get_node("menu_play").set_disabled(true)
 	sfx.play('cry')
 	stage_manager.reset_stage(stage_manager.stage_game)
+	game.day_shifter()
 	pass # replace with function body
