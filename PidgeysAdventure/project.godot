@@ -12,6 +12,7 @@ config_version=3
 
 config/name="Pidgey'sAdventures"
 run/main_scene="res://stages/main_menu.tscn"
+boot_splash/image="res://splash-screen.png"
 config/icon="res://icon.png"
 
 [autoload]
