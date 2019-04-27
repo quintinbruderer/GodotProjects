@@ -7,6 +7,7 @@ onready var normal = sprite.get_texture()
 onready var shiny = load("res://sprites/burd-gold.png")
 onready var shiny_animation = get_node('shiny_particle/sparkle')
 
+
 signal state_changed
 
 const forward_speed = 150
@@ -29,6 +30,7 @@ func _ready():
 	set_process_unhandled_input(true)
 	set_physics_process(true)
 	add_to_group(game.GROUP_BIRD)
+	
 	pass
 
 func _physics_process(delta):
@@ -134,8 +136,9 @@ class FlappingState:
 		pass
 	
 	func unhandled_input(event):
+		
 		#Though redundent looking, protects from quick tap lag
-		if event is InputEventScreenTouch and event.pressed:
+		if event is InputEventScreenTouch and event.pressed :
 			flap()
 		pass	
 		
